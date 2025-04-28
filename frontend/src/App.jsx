@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Login from "./components/Login";
-import Rekapsuratmasuk from "./components/Rekap-surat-masuk";
+import Rekapsuratmasuk from "./components/kepsek/Rekap-surat-masuk";
 
 function App() {
   return (

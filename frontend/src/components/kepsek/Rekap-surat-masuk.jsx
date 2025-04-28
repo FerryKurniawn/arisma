@@ -1,5 +1,5 @@
 import React from "react";
-import Navigasi from "./Navigasi";
+import Navigasi from "../Navigasi";
 
 const RekapSuratMasuk = () => {
   return (
