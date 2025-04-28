@@ -5,35 +5,29 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Handle form submit
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch("http://localhost:2000/api/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
-
       if (response.status === 200) {
-        // Simpan token ke localStorage atau sessionStorage
         localStorage.setItem("token", data.token);
-
-        // Redirect atau handle login sukses
-        window.location.href = "/dashboard"; // Misalnya setelah login ke dashboard
+        window.location.href = "/rekap-surat-masuk";
       } else {
-        // Tampilkan error
         setError(data.message || "Terjadi kesalahan");
       }
     } catch (err) {
-      console.error("Login error:", err);
       setError("Terjadi kesalahan jaringan");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,15 +43,7 @@ export default function LoginPage() {
           <p className="text-center mt-2 text-gray-700">
             Halo, Selamat Datang di <strong>ARISMA</strong> (
             <strong>ARSIP DIGITAL MADRASAH ALIYAH NEGERI 1</strong>).
-            <br />
-            Solusi Cerdas Pengelolaan Arsip Digital Madrasah Aliyah Negeri 1.
           </p>
-
-          {/* Tampilkan error message jika ada */}
-          {error && (
-            <div className="text-red-500 text-center mb-4">{error}</div>
-          )}
-
           <form className="mt-6" onSubmit={handleLogin}>
             <div className="mb-4">
               <label className="block text-gray-700 font-medium">
@@ -66,8 +52,9 @@ export default function LoginPage() {
               <input
                 type="text"
                 id="username"
-                name="username"
-                className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600"
+                className={`w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 ${
+                  error ? "border-red-500" : "border-gray-300"
+                }`}
                 placeholder="Enter your User name"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -82,8 +69,9 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  name="password"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 pr-10"
+                  className={`w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 pr-10 ${
+                    error ? "border-red-500" : "border-gray-300"
+                  }`}
                   placeholder="Enter your Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -102,20 +90,16 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="flex justify-between items-center mb-6 text-sm">
-              <div>
-                <input type="checkbox" id="remember" className="mr-2" />
-                <label htmlFor="remember" className="text-gray-700">
-                  Remember me
-                </label>
-              </div>
-            </div>
+            {error && (
+              <div className="text-red-500 text-center mb-4">{error}</div>
+            )}
 
             <button
               type="submit"
               className="w-full bg-green-800 hover:bg-green-900 text-white font-semibold py-2 rounded-full transition"
+              disabled={isLoading}
             >
-              Login
+              {isLoading ? "Loading..." : "Login"}
             </button>
           </form>
         </div>

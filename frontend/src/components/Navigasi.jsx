@@ -1,0 +1,71 @@
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
+function Navigasi() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleButtonClick = (buttonPath) => {
+    navigate(buttonPath);
+  };
+
+  return (
+    <div className="w-[450px] ml-5 flex flex-col items-center mt-[40px] shadow-md h-screen">
+      <img src="man1.png" alt="Logo" width="225" className="mt-10" />
+
+      <div className="flex flex-col items-center mt-[40px] text-2xl font-semibold">
+        <h1>SIMANIS</h1>
+        <h2>SISTEM INFORMASI</h2>
+        <h2>MADRASAH ALIYAH NEGERI 1 SINTANG</h2>
+      </div>
+
+      <div className="p-10 rounded-lg shadow-lg mt-[40px]">
+        <div
+          onClick={() => handleButtonClick("/rekap-surat-masuk")}
+          className={`flex items-center gap-4 p-2 mb-[20px] w-[300px] rounded-lg cursor-pointer ${
+            location.pathname === "/rekap-surat-masuk" ? "bg-[#34542C50]" : ""
+          }`}
+        >
+          <img
+            src="surat_masuk.png"
+            alt="Surat Masuk"
+            className="w-[23px] h-[23px]"
+          />
+          <span
+            className={`text-2xl font-semibold ${
+              location.pathname === "/rekap-surat-masuk"
+                ? "text-black"
+                : "text-gray-600"
+            }`}
+          >
+            Surat Masuk
+          </span>
+        </div>
+
+        <div
+          onClick={() => handleButtonClick("/rekap-surat-keluar")}
+          className={`flex items-center gap-4 mb-[20px] w-[300px] p-2 rounded-lg cursor-pointer ${
+            location.pathname === "/rekap-surat-keluar" ? "bg-[#34542C50]" : ""
+          }`}
+        >
+          <img
+            src="surat_keluar.png"
+            alt="Surat Keluar"
+            className="w-[23px] h-[23px]"
+          />
+          <span
+            className={`text-2xl font-semibold ${
+              location.pathname === "/rekap-surat-keluar"
+                ? "text-black"
+                : "text-gray-600"
+            }`}
+          >
+            Surat Keluar
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Navigasi;

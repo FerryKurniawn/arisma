@@ -66,5 +66,8 @@ enum Role {
 }
 
 enum SifatSurat {
-  Y
+  BIASA
+  RAHASIA
+  PENTING
+  SEGERA
 }

@@ -90,3 +90,8 @@ app.post("/api/login", async (req, res) => {
     res.status(500).json({ message: "Terjadi kesalahan server" });
   }
 });
+
+app.get("/api/surat-masuk", async (req, res) => {
+  const suratMasuk = await prisma.SuratMasuk.findMany();
+  res.send(suratMasuk);
+});
