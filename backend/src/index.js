@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
-
+const { PrismaClient } = require("@prisma/client");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
 const dotenv = require("dotenv");
 dotenv.config();
 const PORT = process.env.PORT;
+app.use(express.json());
 
 app.listen(PORT, (err) => {
   if (err) {
@@ -27,18 +30,21 @@ app.post("/api/register", async (req, res) => {
   const { username, password, role } = req.body;
 
   try {
+    // Cek apakah username sudah dipakai
     const existingUser = await prisma.user.findUnique({ where: { username } });
     if (existingUser) {
       return res.status(400).json({ message: "Username sudah digunakan" });
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Simpan user baru
     const newUser = await prisma.user.create({
       data: {
         username,
         password: hashedPassword,
-        role: role.toUpperCase(), //"ADMIN", "KEPSEK"
+        role: role.toUpperCase(), // "ADMIN", "KEPSEK"
       },
     });
 
