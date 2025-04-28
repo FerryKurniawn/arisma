@@ -38,7 +38,7 @@ app.post("/api/register", async (req, res) => {
       data: {
         username,
         password: hashedPassword,
-        role: role.toUpperCase(), // Misal: "ADMIN", "KEPALA_SEKOLAH"
+        role: role.toUpperCase(), //"ADMIN", "KEPSEK"
       },
     });
 
@@ -56,5 +56,32 @@ app.post("/api/register", async (req, res) => {
       message: "Terjadi kesalahan server",
       error: err.message,
     });
+  }
+});
+
+app.post("/api/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await prisma.user.findUnique({ where: { username } });
+    if (!user)
+      return res.status(400).json({ message: "Username tidak ditemukan" });
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(400).json({ message: "Password salah" });
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username, role: user.role },
+      process.env.JWT_SECRET || "SECRET_KEY_DEFAULT",
+      { expiresIn: "1h" }
+    );
+
+    res.json({
+      message: "Login berhasil",
+      token,
+      user: { id: user.id, username: user.username, role: user.role },
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Terjadi kesalahan server" });
   }
 });
