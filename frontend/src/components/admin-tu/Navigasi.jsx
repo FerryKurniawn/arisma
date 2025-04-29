@@ -52,6 +52,7 @@ function Navigasi() {
           onClick={() => handleButtonClick("/admin/rekap-surat-keluar")}
           className={`flex items-center gap-4 mb-[20px] w-[300px] p-2 rounded-lg cursor-pointer ${
             location.pathname === "/admin/rekap-surat-keluar" ||
+            location.pathname === "/admin/tambah-surat-keluar" ||
             location.pathname.startsWith("/admin/edit-surat-keluar/") ||
             location.pathname.startsWith("/admin/detail-surat-keluar/")
               ? "bg-[#34542C50]"
@@ -66,6 +67,7 @@ function Navigasi() {
           <span
             className={`text-2xl font-regular transition-all duration-200 ${
               location.pathname === "/admin/rekap-surat-keluar" ||
+              location.pathname === "/admin/tambah-surat-keluar" ||
               location.pathname.startsWith("/admin/edit-surat-keluar/") ||
               location.pathname.startsWith("/admin/detail-surat-keluar/")
                 ? "text-black font-bold"

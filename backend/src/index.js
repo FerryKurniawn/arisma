@@ -13,9 +13,7 @@ dotenv.config();
 const PORT = process.env.PORT || 2000;
 
 app.use(cors());
-app.use(express.json()); // <--- cukup sekali di sini
-
-// Pastikan uploads folder ada
+app.use(express.json());
 const uploadFolder = "uploads/";
 if (!fs.existsSync(uploadFolder)) {
   fs.mkdirSync(uploadFolder);
@@ -47,6 +45,7 @@ app.listen(PORT, (err) => {
 app.get("/api", (req, res) => {
   res.send("Welcome to my api boskuh");
 });
+// rest api users
 
 app.get("/api/user", async (req, res) => {
   const user = await prisma.user.findMany();

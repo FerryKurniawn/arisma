@@ -90,7 +90,7 @@ const DetailSuratKeluar = () => {
             </div>
           </div>
         ) : (
-          <p>Memuat data surat keluar...</p>
+          <p>`Tidak ada data surat masuk pada id ${surat.id}`</p>
         )}
       </main>
     </div>
