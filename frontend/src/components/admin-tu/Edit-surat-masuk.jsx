@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Navigasi from "../Navigasi";
+import Navigasi from "./Navigasi";
 import InputForm from "../InputForm";
 
 const EditSuratMasuk = () => {

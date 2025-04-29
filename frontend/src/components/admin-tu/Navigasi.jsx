@@ -35,10 +35,10 @@ function Navigasi() {
             className="w-[23px] h-[23px]"
           />
           <span
-            className={`text-2xl font-semibold ${
+            className={`text-2xl font-semibold${
               location.pathname === "/admin/rekap-surat-masuk" ||
               "/admin/tambah-surat-masuk"
-                ? "text-black"
+                ? "text-black font-bold"
                 : "text-gray-600"
             }`}
           >

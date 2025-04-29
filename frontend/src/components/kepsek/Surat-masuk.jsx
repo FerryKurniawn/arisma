@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Navigasi from "./Navigasi";
+import Navigasi from "./Kepsekvigasi";
 import { useNavigate } from "react-router-dom";
 
-const RekapSuratMasuk = () => {
+const SuratMasuk = () => {
   const [suratMasuk, setSuratMasuk] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -27,46 +27,13 @@ const RekapSuratMasuk = () => {
     return <div>Loading...</div>;
   }
 
-  const handleTambah = (e) => {
-    e.preventDefault();
-    navigate("/admin/tambah-surat-masuk");
-  };
-
   const handleLogout = (e) => {
     e.preventDefault();
     navigate("/login");
   };
 
-  const handleEdit = (id) => {
-    navigate(`/admin/edit-surat-masuk/${id}`);
-  };
-
-  const handleDelete = async (id) => {
-    const konfirmasi = window.confirm(
-      "Apakah Anda yakin ingin menghapus surat ini?"
-    );
-    if (!konfirmasi) return;
-
-    try {
-      const response = await fetch(
-        `http://localhost:2000/api/surat-masuk/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (response.ok) {
-        // Hapus data di state agar otomatis update tabel
-        setSuratMasuk(suratMasuk.filter((surat) => surat.id !== id));
-        alert("Surat berhasil dihapus!");
-      } else {
-        const errorData = await response.json();
-        alert(`Gagal menghapus surat: ${errorData.message}`);
-      }
-    } catch (error) {
-      console.error("Error deleting surat:", error);
-      alert("Terjadi kesalahan saat menghapus surat");
-    }
+  const handleView = (id) => {
+    navigate(`/kepsek/detail-surat-masuk/${id}`);
   };
 
   const formatTanggal = (dateString) => {
@@ -94,7 +61,7 @@ const RekapSuratMasuk = () => {
             </button>
           </div>
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Rekap Surat Masuk</h2>
+            <h2 className="text-2xl font-bold"> Surat Masuk</h2>
             <div className="flex items-center gap-2">
               <div className="relative flex-1 max-w-md">
                 <input
@@ -139,17 +106,10 @@ const RekapSuratMasuk = () => {
                   <td className="p-3">{surat.isiDisposisi}</td>
                   <td className="p-3 flex justify-center items-center gap-3 mt-3">
                     <button
-                      onClick={() => handleEdit(surat.id)}
-                      className="text-yellow-500 hover:text-yellow-600 text-lg hover:cursor-pointer"
+                      onClick={() => handleView(surat.id)}
+                      className="hover:cursor-pointer"
                     >
-                      <img src="/pencil.png" width="25px" alt="Edit" />
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(surat.id)}
-                      className="text-red-500 hover:text-red-600 text-lg hover:cursor-pointer"
-                    >
-                      <img src="/trash-can.png" width="25px" alt="Delete" />
+                      <img src="/eye.png" width="25px" alt="Edit" />
                     </button>
                   </td>
                 </tr>
@@ -157,18 +117,9 @@ const RekapSuratMasuk = () => {
             </tbody>
           </table>
         </div>
-
-        <div className="flex justify-end mt-6">
-          <button
-            className="bg-gray-300 hover:bg-gray-400 px-8 py-2 rounded-md text-sm"
-            onClick={handleTambah}
-          >
-            Tambah
-          </button>
-        </div>
       </main>
     </div>
   );
 };
 
-export default RekapSuratMasuk;
+export default SuratMasuk;

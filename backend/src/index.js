@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
 const cors = require("cors");
+const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
 const dotenv = require("dotenv");
@@ -146,9 +147,12 @@ app.get("/api/surat-masuk/:id", async (req, res) => {
     }
 
     res.json(surat);
-  } catch (error) {
-    console.error("Error fetching surat masuk by ID:", error);
-    res.status(500).json({ message: "Server error" });
+  } catch (err) {
+    console.error("❌ ERROR SAAT CREATE SuratMasuk:", err); // Tampilkan error lengkap
+    res.status(500).json({
+      message: "Terjadi kesalahan saat menambahkan Surat Masuk",
+      error: err.message,
+    });
   }
 });
 
@@ -163,23 +167,29 @@ app.post("/api/surat-masuk", upload.single("fileUrl"), async (req, res) => {
     isiDisposisi,
   } = req.body;
 
+  console.log("REQ.BODY:", req.body);
+  console.log("REQ.FILE:", req.file);
+
   try {
-    const suratMasuk = await prisma.SuratMasuk.create({
+    const suratMasuk = await prisma.suratMasuk.create({
       data: {
         noSurat,
         perihal,
         alamatPengirim,
-        tanggalTerima: new Date(tanggalTerima),
+        tanggalTerima,
         sifatSurat,
         fileUrl: req.file ? `/uploads/${req.file.filename}` : null,
         disposisi,
         isiDisposisi,
       },
     });
-    res.send("surat masuk telah berhasil ditambahkan");
+    res.send("Surat masuk telah berhasil ditambahkan");
   } catch (err) {
-    console.error("Error creating SuratMasuk:", err);
-    res.status(500).send("An error occurred while adding Surat Masuk");
+    console.error("❌ ERROR SAAT CREATE SuratMasuk:", err); // Tambah log ini
+    res.status(500).json({
+      message: "Terjadi kesalahan server",
+      error: err.message,
+    });
   }
 });
 
@@ -260,3 +270,7 @@ app.delete("/api/surat-masuk/:id", async (req, res) => {
     });
   }
 });
+
+// kepsek
+
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));

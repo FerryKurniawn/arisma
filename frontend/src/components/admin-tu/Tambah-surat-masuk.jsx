@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navigasi from "../Navigasi";
+import Navigasi from "./Navigasi";
 import { useNavigate } from "react-router-dom";
 import InputForm from "../InputForm";
 
