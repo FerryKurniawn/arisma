@@ -9,6 +9,7 @@ import Rekapsuratkeluaradmin from "./components/admin-tu/surat-keluar/Rekap-sura
 //kepsek
 import Suratmasukkepsek from "./components/kepsek/Surat-masuk";
 import Detailsuratmasukkepsek from "./components/kepsek/Detail-surat-masuk";
+import DaftarDisposisi from "./components/kepsek/Daftar-Disposisi";
 
 function App() {
   return (
@@ -44,6 +45,12 @@ function App() {
             path="/kepsek/detail-surat-masuk/:id"
             element={<Detailsuratmasukkepsek />}
           />
+
+          <Route
+            path="/kepsek/daftar-disposisi"
+            element={<DaftarDisposisi />}
+          />
+
         </Routes>
       </BrowserRouter>
     </>

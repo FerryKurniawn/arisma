@@ -76,6 +76,7 @@ return (
                       className="hover:cursor-pointer"
                     >
                       <img src="/eye.png" width="25px" alt="Edit" />
+                      <img src="/trash-can.png" width="25px" alt="Edit" />
                     </button>
                   </td>
                 </tr>
