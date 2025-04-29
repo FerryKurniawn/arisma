@@ -66,7 +66,7 @@ function Navigasi() {
                 : "text-gray-600"
             }`}
           >
-            Surat Keluar
+            Disposisi
           </span>
         </div>
       </div>

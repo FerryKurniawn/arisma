@@ -56,7 +56,7 @@ const DetailSuratMasuk = () => {
       <main className="flex-1 p-8">
         <div className="flex flex-col items-start justify-between mb-6">
           <div className="flex items-center gap-4 ml-auto">
-            <span className="text-sm font-medium">Admin TU 1</span>
+            <span className="text-sm font-medium">Kepala Sekolah</span>
             <button
               className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
               onClick={handleLogout}

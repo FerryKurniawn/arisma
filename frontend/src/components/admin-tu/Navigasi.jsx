@@ -24,7 +24,7 @@ function Navigasi() {
           onClick={() => handleButtonClick("/admin/rekap-surat-masuk")}
           className={`flex items-center gap-4 p-2 mb-[20px] w-[300px] rounded-lg cursor-pointer ${
             location.pathname === "/admin/rekap-surat-masuk" ||
-            "/admin/tambah-surat-masuk"
+            location.pathname === "/admin/tambah-surat-masuk"
               ? "bg-[#34542C50]"
               : ""
           }`}
@@ -35,9 +35,9 @@ function Navigasi() {
             className="w-[23px] h-[23px]"
           />
           <span
-            className={`text-2xl font-semibold${
+            className={`text-2xl font-regular transition-all duration-200 ${
               location.pathname === "/admin/rekap-surat-masuk" ||
-              "/admin/tambah-surat-masuk"
+              location.pathname === "/admin/tambah-surat-masuk"
                 ? "text-black font-bold"
                 : "text-gray-600"
             }`}
@@ -60,9 +60,9 @@ function Navigasi() {
             className="w-[23px] h-[23px]"
           />
           <span
-            className={`text-2xl font-semibold ${
+            className={`text-2xl font-regular transition-all duration-200 ${
               location.pathname === "/admin/rekap-surat-keluar"
-                ? "text-black"
+                ? "text-black font-bold"
                 : "text-gray-600"
             }`}
           >

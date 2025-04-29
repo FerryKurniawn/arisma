@@ -270,6 +270,91 @@ app.delete("/api/surat-masuk/:id", async (req, res) => {
     });
   }
 });
+// surat keluar admin tu
+app.get("/api/surat-keluar", async (req, res) => {
+  try {
+    const suratKeluar = await prisma.suratKeluar.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    res.json(suratKeluar);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Gagal mengambil data surat keluar." });
+  }
+});
+app.post("/api/surat-keluar", async (req, res) => {
+  const {
+    noSurat,
+    noBerkas,
+    alamatPenerima,
+    tanggalKeluar,
+    perihal,
+    noPetunjuk,
+    noPaket,
+  } = req.body;
+
+  try {
+    const newSurat = await prisma.suratKeluar.create({
+      data: {
+        noSurat,
+        noBerkas,
+        alamatPenerima,
+        tanggalKeluar,
+        perihal,
+        noPetunjuk,
+        noPaket,
+      },
+    });
+    res.status(201).json(newSurat);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Gagal menambahkan surat keluar." });
+  }
+});
+app.put("/api/surat-keluar/:id", async (req, res) => {
+  const { id } = req.params;
+  const {
+    noSurat,
+    noBerkas,
+    alamatPenerima,
+    tanggalKeluar,
+    perihal,
+    noPetunjuk,
+    noPaket,
+  } = req.body;
+
+  try {
+    const updated = await prisma.suratKeluar.update({
+      where: { id: parseInt(id) },
+      data: {
+        noSurat,
+        noBerkas,
+        alamatPenerima,
+        tanggalKeluar,
+        perihal,
+        noPetunjuk,
+        noPaket,
+      },
+    });
+    res.json(updated);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Gagal mengupdate surat keluar." });
+  }
+});
+
+app.delete("/api/surat-keluar/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.suratKeluar.delete({
+      where: { id: parseInt(id) },
+    });
+    res.json({ message: "Surat keluar berhasil dihapus." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Gagal menghapus surat keluar." });
+  }
+});
 
 // kepsek
 

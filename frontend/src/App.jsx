@@ -4,7 +4,9 @@ import Login from "./components/Login";
 import Rekapsuratmasukadmin from "./components/admin-tu/Rekap-surat-masuk";
 import Tambahsuratmasukadmin from "./components/admin-tu/Tambah-surat-masuk";
 import Editsuratmasukadmin from "./components/admin-tu/Edit-surat-masuk";
-
+// surat keluar admin tu
+import Rekapsuratkeluaradmin from "./components/admin-tu/surat-keluar/Rekap-surat-keluar";
+//kepsek
 import Suratmasukkepsek from "./components/kepsek/Surat-masuk";
 import Detailsuratmasukkepsek from "./components/kepsek/Detail-surat-masuk";
 
@@ -15,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           {/* Admin TU */}
+          {/* Surat Masuk*/}
           <Route
             path="/admin/rekap-surat-masuk"
             element={<Rekapsuratmasukadmin />}
@@ -26,6 +29,11 @@ function App() {
           <Route
             path="/admin/edit-surat-masuk/:id"
             element={<Editsuratmasukadmin />}
+          />
+          {/* Admin TU Surat Keluar */}
+          <Route
+            path="/admin/rekap-surat-keluar"
+            element={<Rekapsuratkeluaradmin />}
           />
           {/* Kepsek */}
           <Route

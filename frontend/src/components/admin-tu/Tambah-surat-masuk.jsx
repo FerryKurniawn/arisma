@@ -122,16 +122,19 @@ const TambahSuratMasuk = () => {
             </div>
 
             {/* File Upload */}
-            <label className="w-full p-6 border rounded-md text-center bg-white text-black shadow cursor-pointer">
-              {file
-                ? file.name
-                : "Choose files or drag and drop files to upload"}
-              <input
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-            </label>
+            <div className="flex items-center gap-4 mb-4">
+              <p className="font-medium w-64">File Upload</p>
+              <label className="w-full p-6 rounded-md text-center bg-white text-black shadow cursor-pointer">
+                {file
+                  ? file.name
+                  : "Choose files or drag and drop files to upload"}
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </label>
+            </div>
 
             <InputForm
               label="Disposisi"
