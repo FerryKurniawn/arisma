@@ -10,30 +10,34 @@ function Navigasi() {
   };
 
   return (
-    <div className="w-[450px] ml-5 flex flex-col items-center mt-[40px] shadow-md h-screen">
-      <img src="man1.png" alt="Logo" width="225" className="mt-10" />
+    <div className="w-[400px] ml-5 flex flex-col items-center mt-[40px] shadow-md h-screen">
+      <img src="/man1.png" alt="Logo" width="225" className="mt-5" />
 
-      <div className="flex flex-col items-center mt-[40px] text-2xl font-semibold">
-        <h1>SIMANIS</h1>
-        <h2>SISTEM INFORMASI</h2>
+      <div className="flex flex-col items-center mt-[40px] text-xl font-semibold">
+        <h1>ARISMA</h1>
+        <h2>ARSIP DIGITAL</h2>
         <h2>MADRASAH ALIYAH NEGERI 1 SINTANG</h2>
       </div>
 
-      <div className="p-10 rounded-lg shadow-lg mt-[40px]">
+      <div className="p-10 rounded-lg shadow-lg mt-[10px]">
         <div
-          onClick={() => handleButtonClick("/rekap-surat-masuk")}
+          onClick={() => handleButtonClick("/admin/rekap-surat-masuk")}
           className={`flex items-center gap-4 p-2 mb-[20px] w-[300px] rounded-lg cursor-pointer ${
-            location.pathname === "/rekap-surat-masuk" ? "bg-[#34542C50]" : ""
+            location.pathname === "/admin/rekap-surat-masuk" ||
+            "/admin/tambah-surat-masuk"
+              ? "bg-[#34542C50]"
+              : ""
           }`}
         >
           <img
-            src="surat_masuk.png"
+            src="/surat_masuk.png"
             alt="Surat Masuk"
             className="w-[23px] h-[23px]"
           />
           <span
             className={`text-2xl font-semibold ${
-              location.pathname === "/rekap-surat-masuk"
+              location.pathname === "/admin/rekap-surat-masuk" ||
+              "/admin/tambah-surat-masuk"
                 ? "text-black"
                 : "text-gray-600"
             }`}
@@ -43,19 +47,21 @@ function Navigasi() {
         </div>
 
         <div
-          onClick={() => handleButtonClick("/rekap-surat-keluar")}
+          onClick={() => handleButtonClick("/admin/rekap-surat-keluar")}
           className={`flex items-center gap-4 mb-[20px] w-[300px] p-2 rounded-lg cursor-pointer ${
-            location.pathname === "/rekap-surat-keluar" ? "bg-[#34542C50]" : ""
+            location.pathname === "/admin/rekap-surat-keluar"
+              ? "bg-[#34542C50]"
+              : ""
           }`}
         >
           <img
-            src="surat_keluar.png"
+            src="/google-docs.png"
             alt="Surat Keluar"
             className="w-[23px] h-[23px]"
           />
           <span
             className={`text-2xl font-semibold ${
-              location.pathname === "/rekap-surat-keluar"
+              location.pathname === "/admin/rekap-surat-keluar"
                 ? "text-black"
                 : "text-gray-600"
             }`}

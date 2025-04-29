@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -6,10 +7,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
       const response = await fetch("http://localhost:2000/api/login", {
         method: "POST",
@@ -18,14 +21,22 @@ export default function LoginPage() {
       });
 
       const data = await response.json();
+
       if (response.status === 200) {
-        localStorage.setItem("token", data.token);
-        window.location.href = "/rekap-surat-masuk";
+        console.log(data); // Lihat apakah `role` ada di sini
+        localStorage.setItem("token", data.token); // Simpan token di localStorage
+
+        // Cek role dan arahkan ke halaman yang sesuai
+        if (data.user.role == "ADMIN") {
+          navigate("/admin/rekap-surat-masuk");
+        } else if (data.user.role == "KEPSEK") {
+          navigate("/kepsek/rekap-surat-masuk");
+        }
       } else {
         setError(data.message || "Terjadi kesalahan");
       }
     } catch (err) {
-      setError("Terjadi kesalahan jaringan");
+      console.log(err);
     } finally {
       setIsLoading(false);
     }

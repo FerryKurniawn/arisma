@@ -20,10 +20,6 @@ model User {
   role      Role     @default(ADMIN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Relasi
-  suratMasuk   SuratMasuk[]
-  suratKeluar  SuratKeluar[]
 }
 
 model SuratMasuk {
@@ -31,16 +27,14 @@ model SuratMasuk {
   noSurat        String
   perihal        String
   alamatPengirim String
-  tanggalTerima  DateTime
+  tanggalTerima  String
   sifatSurat     SifatSurat
+  fileUrl        String?
   disposisi      String?
   isiDisposisi   String?
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id])
 }
 
 model SuratKeluar {
@@ -48,16 +42,13 @@ model SuratKeluar {
   noSurat        String
   noBerkas       String
   alamatPenerima String
-  tanggalKeluar  DateTime
+  tanggalKeluar  String
   perihal        String
   noPetunjuk     String
   noPaket        String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id])
 }
 
 enum Role {
@@ -66,8 +57,7 @@ enum Role {
 }
 
 enum SifatSurat {
-  BIASA
-  RAHASIA
-  PENTING
-  SEGERA
+  SangatSegera
+  Segera
+  Biasa
 }
