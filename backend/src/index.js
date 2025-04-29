@@ -270,7 +270,9 @@ app.delete("/api/surat-masuk/:id", async (req, res) => {
     });
   }
 });
+
 // surat keluar admin tu
+
 app.get("/api/surat-keluar", async (req, res) => {
   try {
     const suratKeluar = await prisma.suratKeluar.findMany({
@@ -280,6 +282,27 @@ app.get("/api/surat-keluar", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Gagal mengambil data surat keluar." });
+  }
+});
+app.get("/api/surat-keluar/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const surat = await prisma.suratKeluar.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!surat) {
+      return res.status(404).json({ message: "Surat tidak ditemukan" });
+    }
+
+    res.json(surat);
+  } catch (err) {
+    console.error("❌ ERROR SAAT CREATE SuratMasuk:", err); // Tampilkan error lengkap
+    res.status(500).json({
+      message: "Terjadi kesalahan saat menambahkan Surat Masuk",
+      error: err.message,
+    });
   }
 });
 app.post("/api/surat-keluar", async (req, res) => {
@@ -342,7 +365,6 @@ app.put("/api/surat-keluar/:id", async (req, res) => {
     res.status(500).json({ message: "Gagal mengupdate surat keluar." });
   }
 });
-
 app.delete("/api/surat-keluar/:id", async (req, res) => {
   const { id } = req.params;
   try {
