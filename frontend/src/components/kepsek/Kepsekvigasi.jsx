@@ -66,7 +66,7 @@ function Navigasi() {
                 : "text-gray-600"
             }`}
           >
-            Disposisi
+            Daftar Disposisi
           </span>
         </div>
       </div>

@@ -117,12 +117,16 @@ const RekapSuratKeluar = () => {
                     <td className="p-3 text-center">{surat.noPaket}</td>
                     <td className="p-3 flex justify-center items-center gap-3 mt-3">
                       <button
-                        onClick={() => navigate("/admin/detail-surat-keluar")}
+                        onClick={() =>
+                          navigate(`/admin/detail-surat-keluar/${surat.id}`)
+                        }
                       >
                         <img src="/eye.png" width="68" alt="View" />
                       </button>
                       <button
-                        onClick={() => navigate("/admin/edit-surat-keluar")}
+                        onClick={() =>
+                          navigate(`/admin/edit-surat-keluar/${surat.id}`)
+                        }
                       >
                         <img src="/pencil.png" width="50" alt="Edit" />
                       </button>
@@ -140,7 +144,7 @@ const RekapSuratKeluar = () => {
         <div className="flex justify-end mt-6">
           <button
             className="bg-gray-300 hover:bg-gray-400 px-8 py-2 rounded-md text-sm"
-            disabled
+            onClick={() => navigate("/admin/tambah-surat-keluar")}
           >
             Tambah
           </button>
