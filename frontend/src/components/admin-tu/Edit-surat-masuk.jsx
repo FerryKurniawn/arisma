@@ -15,6 +15,7 @@ const EditSuratMasuk = () => {
   const [sifatSurat, setSifatSurat] = useState("");
   const [disposisi, setDisposisi] = useState("");
   const [isiDisposisi, setIsiDisposisi] = useState("");
+  const [isChanged, setIsChanged] = useState(false); // Track if there are changes
 
   useEffect(() => {
     const fetchSurat = async () => {
@@ -41,6 +42,24 @@ const EditSuratMasuk = () => {
 
     fetchSurat();
   }, [id]);
+
+  useEffect(() => {
+    // Check if any input is modified
+    if (
+      noSurat ||
+      perihal ||
+      alamatPengirim ||
+      tanggalTerima ||
+      sifatSurat ||
+      disposisi ||
+      isiDisposisi ||
+      file
+    ) {
+      setIsChanged(true);
+    } else {
+      setIsChanged(false);
+    }
+  }, [noSurat, perihal, alamatPengirim, tanggalTerima, sifatSurat, disposisi, isiDisposisi, file]);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -153,15 +172,18 @@ const EditSuratMasuk = () => {
               </select>
             </div>
 
-            {/* File Upload */}
-            <label className="w-full p-6 border rounded-md text-center bg-white text-black shadow cursor-pointer">
-              {file ? file.name : "Pilih file baru untuk upload (optional)"}
-              <input
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-            </label>
+            {/* File Upload with label */}
+            <div className="flex items-center gap-4 mb-4">
+              <h1 className="font-medium w-64">Upload File</h1>
+              <label className="w-full p-6 border rounded-md text-center bg-white text-black shadow cursor-pointer">
+                {file ? file.name : "Pilih file baru untuk upload (optional)"}
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </label>
+            </div>
 
             <InputForm
               label="Disposisi"
@@ -179,6 +201,7 @@ const EditSuratMasuk = () => {
             <button
               type="submit"
               className="mt-4 bg-gray-300 hover:bg-gray-400 text-black py-2 rounded-md"
+              disabled={!isChanged} // Disable button if no changes
             >
               Update Surat
             </button>
