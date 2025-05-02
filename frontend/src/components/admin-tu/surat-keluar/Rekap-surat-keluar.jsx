@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navigasi from "../Navigasi";
 import { useNavigate } from "react-router-dom";
 
-const RekapSuratKeluar = () => {
+const RekapSuaraKeluar = () => {
   const navigate = useNavigate();
   const [dataSurat, setDataSurat] = useState([]);
 
@@ -84,18 +84,55 @@ const RekapSuratKeluar = () => {
           <table className="min-w-full text-sm table-fixed">
             <thead className="bg-gray-100">
               <tr>
-                <th className="p-3 text-center font-semibold">No. Surat</th>
-                <th className="p-3 text-center font-semibold">No. Berkas</th>
-                <th className="p-3 text-center font-semibold">
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "150px" }}
+                >
+                  No. Surat
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "200px" }}
+                >
+                  No. Berkas
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "200px" }}
+                >
                   Alamat Penerima
                 </th>
-                <th className="p-3 text-center font-semibold">
-                  Tanggal Keluar
+                <th
+                  className="p-10 text-center font-semibold"
+                  style={{ width: "200px" }} // Membesarkan kolom Tanggal Terima
+                >
+                  Tanggal keluar
                 </th>
-                <th className="p-3 text-center font-semibold">Perihal</th>
-                <th className="p-3 text-center font-semibold">No. Petunjuk</th>
-                <th className="p-3 text-center font-semibold">No. Paket</th>
-                <th className="p-3 text-center font-semibold">Aksi</th>
+
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "150px" }}
+                >
+                  Perihal
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "150px" }}
+                >
+                  No. Petunjuk
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "200px" }}
+                >
+                  No. Paket
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "200px" }}
+                >
+                  Aksi
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -115,23 +152,31 @@ const RekapSuratKeluar = () => {
                     <td className="p-3 text-center">{surat.perihal}</td>
                     <td className="p-3 text-center">{surat.noPetunjuk}</td>
                     <td className="p-3 text-center">{surat.noPaket}</td>
-                    <td className="p-3 flex justify-center items-center gap-3 mt-3">
+                    <td
+                      className="p-3 flex justify-center items-center gap-3 mt-3"
+                      style={{ minWidth: "200px" }}
+                    >
                       <button
                         onClick={() =>
                           navigate(`/admin/detail-surat-keluar/${surat.id}`)
                         }
                       >
-                        <img src="/eye.png" width="68" alt="View" />
+                        <img
+                          src="/eye.png"
+                          width="20"
+                          className="mt-1"
+                          alt="View"
+                        />
                       </button>
                       <button
                         onClick={() =>
                           navigate(`/admin/edit-surat-keluar/${surat.id}`)
                         }
                       >
-                        <img src="/pencil.png" width="50" alt="Edit" />
+                        <img src="/pencil.png" width="15" alt="Edit" />
                       </button>
                       <button onClick={() => handleDelete(surat.id)}>
-                        <img src="/trash-can.png" width="50" alt="Delete" />
+                        <img src="/trash-can.png" width="15" alt="Delete" />
                       </button>
                     </td>
                   </tr>
@@ -154,4 +199,4 @@ const RekapSuratKeluar = () => {
   );
 };
 
-export default RekapSuratKeluar;
+export default RekapSuaraKeluar;

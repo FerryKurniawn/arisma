@@ -7,6 +7,7 @@ const DetailSuratKeluar = () => {
   const { id } = useParams();
 
   const [surat, setSurat] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSurat = async () => {
@@ -21,14 +22,15 @@ const DetailSuratKeluar = () => {
         setSurat(data);
       } catch (error) {
         console.error("Error fetching surat keluar:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchSurat();
   }, [id]);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
+  const handleLogout = () => {
     navigate("/login");
   };
 
@@ -50,35 +52,37 @@ const DetailSuratKeluar = () => {
           <h2 className="text-2xl font-bold mt-4">Detail Surat Keluar</h2>
         </div>
 
-        {surat ? (
+        {loading ? (
+          <p>Loading data surat keluar...</p>
+        ) : surat ? (
           <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-3xl">
             <div className="mb-4">
               <h3 className="font-semibold">No. Surat</h3>
-              <p>{surat.noSurat}</p>
+              <p>{surat.noSurat ?? "null"}</p>
             </div>
             <div className="mb-4">
               <h3 className="font-semibold">No. Berkas</h3>
-              <p>{surat.noBerkas}</p>
+              <p>{surat.noBerkas ?? "null"}</p>
             </div>
             <div className="mb-4">
               <h3 className="font-semibold">Alamat Penerima</h3>
-              <p>{surat.alamatPenerima}</p>
+              <p>{surat.alamatPenerima ?? "null"}</p>
             </div>
             <div className="mb-4">
               <h3 className="font-semibold">Tanggal Keluar</h3>
-              <p>{surat.tanggalKeluar?.slice(0, 10)}</p>
+              <p>{surat.tanggalKeluar?.slice(0, 10) ?? "null"}</p>
             </div>
             <div className="mb-4">
               <h3 className="font-semibold">Perihal</h3>
-              <p>{surat.perihal}</p>
+              <p>{surat.perihal ?? "null"}</p>
             </div>
             <div className="mb-4">
               <h3 className="font-semibold">No. Petunjuk</h3>
-              <p>{surat.noPetunjuk}</p>
+              <p>{surat.noPetunjuk ?? "null"}</p>
             </div>
             <div className="mb-4">
               <h3 className="font-semibold">No. Paket</h3>
-              <p>{surat.noPaket}</p>
+              <p>{surat.noPaket ?? "null"}</p>
             </div>
             <div className="mt-6">
               <button
@@ -90,7 +94,7 @@ const DetailSuratKeluar = () => {
             </div>
           </div>
         ) : (
-          <p>`Tidak ada data surat masuk pada id ${surat.id}`</p>
+          <p>Data surat keluar tidak ditemukan pada id {id}.</p>
         )}
       </main>
     </div>

@@ -4,6 +4,7 @@ import Login from "./components/Login";
 import Rekapsuratmasukadmin from "./components/admin-tu/Rekap-surat-masuk";
 import Tambahsuratmasukadmin from "./components/admin-tu/Tambah-surat-masuk";
 import Editsuratmasukadmin from "./components/admin-tu/Edit-surat-masuk";
+import Detailsuratmasukadmin from "./components/admin-tu/Detail-surat-masuk";
 // surat keluar admin tu
 import Rekapsuratkeluaradmin from "./components/admin-tu/surat-keluar/Rekap-surat-keluar";
 import Editsuratkeluaradmin from "./components/admin-tu/surat-keluar/Edit-surat-keluar";
@@ -32,6 +33,10 @@ function App() {
           <Route
             path="/admin/edit-surat-masuk/:id"
             element={<Editsuratmasukadmin />}
+          />
+          <Route
+            path="/admin/detail-surat-masuk/:id"
+            element={<Detailsuratmasukadmin />}
           />
           {/* Admin TU Surat Keluar */}
           <Route

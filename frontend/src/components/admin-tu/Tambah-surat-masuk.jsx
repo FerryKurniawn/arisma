@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Navigasi from "./Navigasi";
 import { useNavigate } from "react-router-dom";
 import InputForm from "../InputForm";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // Import CSS untuk DatePicker
+import { format } from "date-fns";
 
 const TambahSuratMasuk = () => {
   const navigate = useNavigate();
@@ -10,10 +13,8 @@ const TambahSuratMasuk = () => {
   const [noSurat, setNoSurat] = useState("");
   const [perihal, setPerihal] = useState("");
   const [alamatPengirim, setAlamatPengirim] = useState("");
-  const [tanggalTerima, setTanggalTerima] = useState("");
+  const [tanggalTerima, setTanggalTerima] = useState(null);
   const [sifatSurat, setSifatSurat] = useState("");
-  const [disposisi, setDisposisi] = useState("");
-  const [isiDisposisi, setIsiDisposisi] = useState("");
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -33,11 +34,9 @@ const TambahSuratMasuk = () => {
     formData.append("noSurat", noSurat);
     formData.append("perihal", perihal);
     formData.append("alamatPengirim", alamatPengirim);
-    formData.append("tanggalTerima", tanggalTerima);
+    formData.append("tanggalTerima", format(tanggalTerima, "dd-MM-yyyy")); // Format tanggal
     formData.append("sifatSurat", sifatSurat);
     formData.append("fileUrl", file); // appending file
-    formData.append("disposisi", disposisi);
-    formData.append("isiDisposisi", isiDisposisi);
 
     try {
       const response = await fetch("http://localhost:2000/api/surat-masuk", {
@@ -78,41 +77,64 @@ const TambahSuratMasuk = () => {
         </div>
         <div className="flex min-h-screen">
           <form
-            className="flex flex-col gap-2 w-xl max-w-full"
+            className="flex flex-col gap-4 w-full max-w-4xl"
             onSubmit={handleSubmit}
           >
-            <InputForm
-              label="No. Surat"
-              placeholder="Masukkan No. Surat"
-              value={noSurat}
-              onChange={(e) => setNoSurat(e.target.value)}
-            />
-            <InputForm
-              label="Perihal"
-              placeholder="Masukkan Perihal"
-              value={perihal}
-              onChange={(e) => setPerihal(e.target.value)}
-            />
-            <InputForm
-              label="Alamat Pengirim"
-              placeholder="Masukkan Alamat Pengirim"
-              value={alamatPengirim}
-              onChange={(e) => setAlamatPengirim(e.target.value)}
-            />
-            <InputForm
-              label="Tanggal Terima"
-              placeholder="YYYY-DD-MM"
-              value={tanggalTerima}
-              onChange={(e) => setTanggalTerima(e.target.value)}
-            />
+            {/* No. Surat */}
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">No. Surat</label>
+              <input
+                type="text"
+                placeholder="Masukkan No. Surat"
+                value={noSurat}
+                onChange={(e) => setNoSurat(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+              />
+            </div>
 
-            {/* Dropdown Select for Sifat Surat */}
-            <div className="flex items-center gap-4 mb-4">
-              <p className="font-medium w-64">Sifat Surat</p>
+            {/* Perihal */}
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">Perihal</label>
+              <input
+                type="text"
+                placeholder="Masukkan Perihal"
+                value={perihal}
+                onChange={(e) => setPerihal(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+              />
+            </div>
+
+            {/* Alamat Pengirim */}
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">Alamat Pengirim</label>
+              <input
+                type="text"
+                placeholder="Masukkan Alamat Pengirim"
+                value={alamatPengirim}
+                onChange={(e) => setAlamatPengirim(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+              />
+            </div>
+
+            {/* Tanggal Terima */}
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">Tanggal Terima</label>
+              <DatePicker
+                selected={tanggalTerima}
+                onChange={(date) => setTanggalTerima(date)}
+                dateFormat="dd-MM-yyyy"
+                className="flex-1 p-3 rounded-md pr-[310px] bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                placeholderText="DD-MM-YYYY"
+              />
+            </div>
+
+            {/* Sifat Surat */}
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">Sifat Surat</label>
               <select
-                className="w-full p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
                 value={sifatSurat}
                 onChange={(e) => setSifatSurat(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
               >
                 <option value="">Pilih</option>
                 <option value="Sangat Segera">Sangat Segera</option>
@@ -122,9 +144,9 @@ const TambahSuratMasuk = () => {
             </div>
 
             {/* File Upload */}
-            <div className="flex items-center gap-4 mb-4">
-              <p className="font-medium w-64">File Upload</p>
-              <label className="w-full p-6 rounded-md text-center bg-white text-black shadow cursor-pointer">
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">File Upload</label>
+              <label className="flex-1 p-6 rounded-md text-center bg-white text-black shadow cursor-pointer">
                 {file
                   ? file.name
                   : "Choose files or drag and drop files to upload"}
@@ -136,22 +158,9 @@ const TambahSuratMasuk = () => {
               </label>
             </div>
 
-            <InputForm
-              label="Disposisi"
-              placeholder="Masukkan Disposisi"
-              value={disposisi}
-              onChange={(e) => setDisposisi(e.target.value)}
-            />
-            <InputForm
-              label="Isi Disposisi"
-              placeholder="Masukkan Isi Disposisi"
-              value={isiDisposisi}
-              onChange={(e) => setIsiDisposisi(e.target.value)}
-            />
-
             <button
               type="submit"
-              className="mt-4 bg-gray-300 hover:bg-gray-400 text-black py-2 rounded-md"
+              className="self-start mt-4 bg-gray-300 hover:bg-gray-400 text-black py-2 px-6 rounded-md"
             >
               Tambah
             </button>

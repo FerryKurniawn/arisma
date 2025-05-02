@@ -3,79 +3,43 @@ import Navigasi from "./Navigasi";
 import { useNavigate } from "react-router-dom";
 
 const RekapSuratMasuk = () => {
-  const [suratMasuk, setSuratMasuk] = useState([]);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [dataSurat, setDataSurat] = useState([]);
+
+  const fetchSuratKeluar = () => {
+    fetch("http://localhost:2000/api/surat-masuk")
+      .then((res) => res.json())
+      .then((data) => setDataSurat(data))
+      .catch((err) =>
+        console.error("Gagal fetch data surat keluar:", err.message)
+      );
+  };
 
   useEffect(() => {
-    const fetchSuratMasuk = async () => {
-      try {
-        const response = await fetch("http://localhost:2000/api/surat-masuk");
-        const data = await response.json();
-        setSuratMasuk(data);
-      } catch (error) {
-        console.error("Error fetching surat masuk:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSuratMasuk();
+    fetchSuratKeluar();
   }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  const handleTambah = (e) => {
-    e.preventDefault();
-    navigate("/admin/tambah-surat-masuk");
-  };
 
   const handleLogout = (e) => {
     e.preventDefault();
     navigate("/login");
   };
 
-  const handleEdit = (id) => {
-    navigate(`/admin/edit-surat-masuk/${id}`);
-  };
-
   const handleDelete = async (id) => {
-    const konfirmasi = window.confirm(
-      "Apakah Anda yakin ingin menghapus surat ini?"
-    );
-    if (!konfirmasi) return;
-
-    try {
-      const response = await fetch(
-        `http://localhost:2000/api/surat-masuk/${id}`,
-        {
+    if (confirm("Yakin ingin menghapus surat ini?")) {
+      try {
+        const res = await fetch(`http://localhost:2000/api/surat-masuk/${id}`, {
           method: "DELETE",
+        });
+        if (res.ok) {
+          fetchSuratKeluar(); // Refresh data
+        } else {
+          alert("Gagal menghapus surat.");
         }
-      );
-
-      if (response.ok) {
-        // Hapus data di state agar otomatis update tabel
-        setSuratMasuk(suratMasuk.filter((surat) => surat.id !== id));
-        alert("Surat berhasil dihapus!");
-      } else {
-        const errorData = await response.json();
-        alert(`Gagal menghapus surat: ${errorData.message}`);
+      } catch (err) {
+        console.error("Error saat hapus surat:", err);
+        alert("Terjadi kesalahan.");
       }
-    } catch (error) {
-      console.error("Error deleting surat:", error);
-      alert("Terjadi kesalahan saat menghapus surat");
     }
-  };
-
-  const formatTanggal = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -117,43 +81,104 @@ const RekapSuratMasuk = () => {
           <table className="min-w-full text-sm table-fixed">
             <thead className="bg-gray-100">
               <tr>
-                <th className="p-3 text-left font-semibold">No. Surat</th>
-                <th className="p-3 text-left font-semibold">Perihal</th>
-                <th className="p-3 text-left font-semibold">Alamat Pengirim</th>
-                <th className="p-3 text-left font-semibold">Tanggal Terima</th>
-                <th className="p-3 text-left font-semibold">Sifat Surat</th>
-                <th className="p-3 text-left font-semibold">Disposisi</th>
-                <th className="p-3 text-left font-semibold">Isi Disposisi</th>
-                <th className="p-3 text-center font-semibold">Aksi</th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "150px" }}
+                >
+                  No. Surat
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "200px" }}
+                >
+                  Perihal
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "200px" }}
+                >
+                  Alamat Pengirim
+                </th>
+                <th
+                  className="p-10 text-center font-semibold"
+                  style={{ width: "200px" }} // Membesarkan kolom Tanggal Terima
+                >
+                  Tanggal Terima
+                </th>
+
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "150px" }}
+                >
+                  Sifat Surat
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "150px" }}
+                >
+                  Disposisi
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "200px" }}
+                >
+                  Isi Disposisi
+                </th>
+                <th
+                  className="p-3 text-center font-semibold"
+                  style={{ width: "200px" }}
+                >
+                  Aksi
+                </th>
               </tr>
             </thead>
             <tbody>
-              {suratMasuk.map((surat, index) => (
-                <tr key={index} className="border-t">
-                  <td className="p-3">{surat.noSurat}</td>
-                  <td className="p-3">{surat.perihal}</td>
-                  <td className="p-3">{surat.alamatPengirim}</td>
-                  <td className="p-3">{formatTanggal(surat.tanggalTerima)}</td>
-                  <td className="p-3">{surat.sifatSurat}</td>
-                  <td className="p-3">{surat.disposisi}</td>
-                  <td className="p-3">{surat.isiDisposisi}</td>
-                  <td className="p-3 flex justify-center items-center gap-3 mt-3">
-                    <button
-                      onClick={() => handleEdit(surat.id)}
-                      className="text-yellow-500 hover:text-yellow-600 text-lg hover:cursor-pointer"
-                    >
-                      <img src="/pencil.png" width="25px" alt="Edit" />
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(surat.id)}
-                      className="text-red-500 hover:text-red-600 text-lg hover:cursor-pointer"
-                    >
-                      <img src="/trash-can.png" width="25px" alt="Delete" />
-                    </button>
+              {dataSurat.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="text-center py-5">
+                    Tidak ada data tersedia.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                dataSurat.map((surat) => (
+                  <tr key={surat.id} className="border-t">
+                    <td className="p-3 text-center">{surat.noSurat}</td>
+                    <td className="p-3 text-center">{surat.perihal}</td>
+                    <td className="p-3 text-center">{surat.alamatPengirim}</td>
+                    <td className="p-3 text-center">{surat.tanggalTerima}</td>
+                    <td className="p-3 text-center">{surat.perihal}</td>
+                    <td className="p-3 text-center">{surat.disposisi}</td>
+                    <td className="p-3 text-center">{surat.isiDisposisi}</td>
+                    <td
+                      className="p-3 flex justify-center items-center gap-3 mt-3"
+                      style={{ minWidth: "200px" }}
+                    >
+                      <button
+                        onClick={() =>
+                          navigate(`/admin/detail-surat-masuk/${surat.id}`)
+                        }
+                      >
+                        <img
+                          src="/eye.png"
+                          width="20"
+                          className="mt-1"
+                          alt="View"
+                        />
+                      </button>
+                      <button
+                        onClick={() =>
+                          navigate(`/admin/edit-surat-masuk/${surat.id}`)
+                        }
+                      >
+                        <img src="/pencil.png" width="15" alt="Edit" />
+                      </button>
+                      <button onClick={() => handleDelete(surat.id)}>
+                        <img src="/trash-can.png" width="15" alt="Delete" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -161,7 +186,7 @@ const RekapSuratMasuk = () => {
         <div className="flex justify-end mt-6">
           <button
             className="bg-gray-300 hover:bg-gray-400 px-8 py-2 rounded-md text-sm"
-            onClick={handleTambah}
+            onClick={() => navigate("/admin/tambah-surat-masuk")}
           >
             Tambah
           </button>

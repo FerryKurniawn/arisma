@@ -25,7 +25,8 @@ function Navigasi() {
           className={`flex items-center gap-4 p-2 mb-[20px] w-[300px] rounded-lg cursor-pointer ${
             location.pathname === "/admin/rekap-surat-masuk" ||
             location.pathname === "/admin/tambah-surat-masuk" ||
-            location.pathname.startsWith("/admin/edit-surat-masuk")
+            location.pathname.startsWith("/admin/edit-surat-masuk") ||
+            location.pathname.startsWith("/admin/detail-surat-masuk")
               ? "bg-[#34542C50]"
               : ""
           }`}
@@ -39,7 +40,8 @@ function Navigasi() {
             className={`text-2xl font-regular transition-all duration-200 ${
               location.pathname === "/admin/rekap-surat-masuk" ||
               location.pathname === "/admin/tambah-surat-masuk" ||
-              location.pathname.startsWith("/admin/edit-surat-masuk")
+              location.pathname.startsWith("/admin/edit-surat-masuk") ||
+              location.pathname.startsWith("/admin/detail-surat-masuk")
                 ? "text-black font-bold"
                 : "text-gray-600"
             }`}
