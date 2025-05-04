@@ -10,10 +10,10 @@ function Navigasi() {
   };
 
   return (
-    <div className="w-[400px] ml-5 flex flex-col items-center mt-[40px] shadow-md h-screen">
+    <div className="w-[400px] ml-5 flex flex-col items-center mt-[40px] shadow-md h-screen bg-white">
       <img src="/man1.png" alt="Logo" width="225" className="mt-5" />
 
-      <div className="flex flex-col items-center mt-[40px] text-xl font-semibold">
+      <div className="flex flex-col items-center text-center mt-[40px] text-xl font-semibold">
         <h1>ARISMA</h1>
         <h2>ARSIP DIGITAL</h2>
         <h2>MADRASAH ALIYAH NEGERI 1 SINTANG</h2>

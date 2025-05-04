@@ -45,6 +45,10 @@ const SuratMasuk = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const formatField = (field) => {
+    return !field || field === "null" ? "-" : field;
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Navigasi />
@@ -89,7 +93,7 @@ const SuratMasuk = () => {
                 <th className="p-3 text-left font-semibold">Alamat Pengirim</th>
                 <th className="p-3 text-left font-semibold">Tanggal Terima</th>
                 <th className="p-3 text-left font-semibold">Sifat Surat</th>
-                <th className="p-3 text-left font-semibold">Disposisi</th>
+                <th className="p-3 text-left font-semibold">Disposisikan Ke</th>
                 <th className="p-3 text-left font-semibold">Isi Disposisi</th>
                 <th className="p-3 text-center font-semibold">Aksi</th>
               </tr>
@@ -102,14 +106,14 @@ const SuratMasuk = () => {
                   <td className="p-3">{surat.alamatPengirim}</td>
                   <td className="p-3">{formatTanggal(surat.tanggalTerima)}</td>
                   <td className="p-3">{surat.sifatSurat}</td>
-                  <td className="p-3">{surat.disposisi}</td>
-                  <td className="p-3">{surat.isiDisposisi}</td>
+                  <td className="p-3">{formatField(surat.disposisi)}</td>
+                  <td className="p-3">{formatField(surat.isiDisposisi)}</td>
                   <td className="p-3 flex justify-center items-center gap-3 mt-3">
                     <button
                       onClick={() => handleView(surat.id)}
                       className="hover:cursor-pointer"
                     >
-                      <img src="/eye.png" width="25px" alt="Edit" />
+                      <img src="/eye.png" width="25px" alt="View" />
                     </button>
                   </td>
                 </tr>

@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Login from "./components/Login";
-import Rekapsuratmasukadmin from "./components/admin-tu/Rekap-surat-masuk";
-import Tambahsuratmasukadmin from "./components/admin-tu/Tambah-surat-masuk";
-import Editsuratmasukadmin from "./components/admin-tu/Edit-surat-masuk";
-import Detailsuratmasukadmin from "./components/admin-tu/Detail-surat-masuk";
+import Rekapsuratmasukadmin from "./components/admin-tu/surat-masuk/Rekap-surat-masuk";
+import Tambahsuratmasukadmin from "./components/admin-tu/surat-masuk/Tambah-surat-masuk";
+import Editsuratmasukadmin from "./components/admin-tu/surat-masuk/Edit-surat-masuk";
+import Detailsuratmasukadmin from "./components/admin-tu/surat-masuk/Detail-surat-masuk";
 // surat keluar admin tu
 import Rekapsuratkeluaradmin from "./components/admin-tu/surat-keluar/Rekap-surat-keluar";
 import Editsuratkeluaradmin from "./components/admin-tu/surat-keluar/Edit-surat-keluar";

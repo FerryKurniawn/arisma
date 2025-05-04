@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Navigasi from "./Navigasi";
+import Navigasi from "../Navigasi";
 import { useNavigate } from "react-router-dom";
-import InputForm from "../InputForm";
+import InputForm from "../../InputForm";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import CSS untuk DatePicker
 import { format } from "date-fns";
@@ -72,8 +72,18 @@ const TambahSuratMasuk = () => {
               Logout
             </button>
           </div>
-
-          <h2 className="text-2xl font-bold mt-4">Tambah Surat Masuk</h2>
+          <div className="flex flex-row justify-between items-center w-full">
+            <h2 className="text-2xl font-bold mt-4">Tambah Surat Masuk</h2>
+            <img
+              src="/back.png"
+              alt="back"
+              width="20px"
+              className="mt-5"
+              onClick={() => {
+                navigate("/admin/rekap-surat-masuk");
+              }}
+            />
+          </div>
         </div>
         <div className="flex min-h-screen">
           <form
@@ -89,6 +99,7 @@ const TambahSuratMasuk = () => {
                 value={noSurat}
                 onChange={(e) => setNoSurat(e.target.value)}
                 className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
               />
             </div>
 
@@ -101,6 +112,7 @@ const TambahSuratMasuk = () => {
                 value={perihal}
                 onChange={(e) => setPerihal(e.target.value)}
                 className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
               />
             </div>
 
@@ -113,6 +125,7 @@ const TambahSuratMasuk = () => {
                 value={alamatPengirim}
                 onChange={(e) => setAlamatPengirim(e.target.value)}
                 className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
               />
             </div>
 
@@ -125,6 +138,7 @@ const TambahSuratMasuk = () => {
                 dateFormat="dd-MM-yyyy"
                 className="flex-1 p-3 rounded-md pr-[310px] bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
                 placeholderText="DD-MM-YYYY"
+                required
               />
             </div>
 
@@ -135,9 +149,10 @@ const TambahSuratMasuk = () => {
                 value={sifatSurat}
                 onChange={(e) => setSifatSurat(e.target.value)}
                 className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
               >
                 <option value="">Pilih</option>
-                <option value="Sangat Segera">Sangat Segera</option>
+                <option value="SangatSegera">Sangat Segera</option>
                 <option value="Segera">Segera</option>
                 <option value="Biasa">Biasa</option>
               </select>
@@ -154,6 +169,7 @@ const TambahSuratMasuk = () => {
                   type="file"
                   className="hidden"
                   onChange={handleFileChange}
+                  required
                 />
               </label>
             </div>

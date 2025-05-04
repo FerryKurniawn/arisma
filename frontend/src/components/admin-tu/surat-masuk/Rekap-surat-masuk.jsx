@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Navigasi from "./Navigasi";
+import Navigasi from "../Navigasi";
 import { useNavigate } from "react-router-dom";
+import Delete from "./Delete";
 
 const RekapSuratMasuk = () => {
   const navigate = useNavigate();
   const [dataSurat, setDataSurat] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const fetchSuratKeluar = () => {
     fetch("http://localhost:2000/api/surat-masuk")
@@ -25,29 +28,35 @@ const RekapSuratMasuk = () => {
   };
 
   const handleDelete = async (id) => {
-    if (confirm("Yakin ingin menghapus surat ini?")) {
-      try {
-        const res = await fetch(`http://localhost:2000/api/surat-masuk/${id}`, {
-          method: "DELETE",
-        });
-        if (res.ok) {
-          fetchSuratKeluar(); // Refresh data
-        } else {
-          alert("Gagal menghapus surat.");
-        }
-      } catch (err) {
-        console.error("Error saat hapus surat:", err);
-        alert("Terjadi kesalahan.");
+    try {
+      const res = await fetch(`http://localhost:2000/api/surat-masuk/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        fetchSuratKeluar(); // Refresh data
+      } else {
+        alert("Gagal menghapus surat.");
       }
+    } catch (err) {
+      console.error("Error saat hapus surat:", err);
+      alert("Terjadi kesalahan.");
+    } finally {
+      setShowDeleteModal(false);
+      setSelectedId(null);
     }
   };
 
+  const openDeleteModal = (id) => {
+    setSelectedId(id);
+    setShowDeleteModal(true);
+  };
+
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-white">
       <Navigasi />
 
-      <main className="flex-1 p-8">
-        <div className="flex flex-col mb-6">
+      <main className="flex-1 p-8 relative">
+        <div className="flex flex-col mb-6 bg-white">
           <div className="flex items-center gap-4 ml-auto mb-5">
             <span className="text-sm font-medium">Admin TU</span>
             <button
@@ -101,11 +110,10 @@ const RekapSuratMasuk = () => {
                 </th>
                 <th
                   className="p-10 text-center font-semibold"
-                  style={{ width: "200px" }} // Membesarkan kolom Tanggal Terima
+                  style={{ width: "200px" }}
                 >
                   Tanggal Terima
                 </th>
-
                 <th
                   className="p-3 text-center font-semibold"
                   style={{ width: "150px" }}
@@ -146,9 +154,13 @@ const RekapSuratMasuk = () => {
                     <td className="p-3 text-center">{surat.perihal}</td>
                     <td className="p-3 text-center">{surat.alamatPengirim}</td>
                     <td className="p-3 text-center">{surat.tanggalTerima}</td>
-                    <td className="p-3 text-center">{surat.perihal}</td>
-                    <td className="p-3 text-center">{surat.disposisi}</td>
-                    <td className="p-3 text-center">{surat.isiDisposisi}</td>
+                    <td className="p-3 text-center">{surat.sifatSurat}</td>
+                    <td className="p-3 text-center">
+                      {surat.disposisi || "-"}
+                    </td>
+                    <td className="p-3 text-center">
+                      {surat.isiDisposisi || "-"}
+                    </td>
                     <td
                       className="p-3 flex justify-center items-center gap-3 mt-3"
                       style={{ minWidth: "200px" }}
@@ -172,7 +184,7 @@ const RekapSuratMasuk = () => {
                       >
                         <img src="/pencil.png" width="15" alt="Edit" />
                       </button>
-                      <button onClick={() => handleDelete(surat.id)}>
+                      <button onClick={() => openDeleteModal(surat.id)}>
                         <img src="/trash-can.png" width="15" alt="Delete" />
                       </button>
                     </td>
@@ -191,6 +203,19 @@ const RekapSuratMasuk = () => {
             Tambah
           </button>
         </div>
+
+        {/* Delete Modal */}
+        {showDeleteModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <Delete
+              onDelete={() => handleDelete(selectedId)}
+              onCancel={() => {
+                setShowDeleteModal(false);
+                setSelectedId(null);
+              }}
+            />
+          </div>
+        )}
       </main>
     </div>
   );

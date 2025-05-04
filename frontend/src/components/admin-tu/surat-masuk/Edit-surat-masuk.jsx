@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Navigasi from "./Navigasi";
-import InputForm from "../InputForm";
+import Navigasi from "../Navigasi";
+import InputForm from "../../InputForm";
 
 const EditSuratMasuk = () => {
   const navigate = useNavigate();
@@ -13,8 +13,8 @@ const EditSuratMasuk = () => {
   const [alamatPengirim, setAlamatPengirim] = useState("");
   const [tanggalTerima, setTanggalTerima] = useState("");
   const [sifatSurat, setSifatSurat] = useState("");
-  const [disposisi, setDisposisi] = useState("");
-  const [isiDisposisi, setIsiDisposisi] = useState("");
+
+  const [originalData, setOriginalData] = useState(null); // simpan nilai asli
 
   useEffect(() => {
     const fetchSurat = async () => {
@@ -22,18 +22,23 @@ const EditSuratMasuk = () => {
         const response = await fetch(
           `http://localhost:2000/api/surat-masuk/${id}`
         );
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data surat masuk");
-        }
+        if (!response.ok) throw new Error("Gagal mengambil data surat masuk");
         const data = await response.json();
 
         setNoSurat(data.noSurat);
         setPerihal(data.perihal);
         setAlamatPengirim(data.alamatPengirim);
-        setTanggalTerima(data.tanggalTerima.slice(0, 10)); // Format YYYY-MM-DD
+        setTanggalTerima(data.tanggalTerima.slice(0, 10));
         setSifatSurat(data.sifatSurat);
-        setDisposisi(data.disposisi);
-        setIsiDisposisi(data.isiDisposisi);
+
+        // simpan data asli
+        setOriginalData({
+          noSurat: data.noSurat,
+          perihal: data.perihal,
+          alamatPengirim: data.alamatPengirim,
+          tanggalTerima: data.tanggalTerima.slice(0, 10),
+          sifatSurat: data.sifatSurat,
+        });
       } catch (error) {
         console.error("Error fetching surat masuk:", error);
       }
@@ -41,6 +46,18 @@ const EditSuratMasuk = () => {
 
     fetchSurat();
   }, [id]);
+
+  const isChanged = () => {
+    if (!originalData) return false;
+    return (
+      noSurat !== originalData.noSurat ||
+      perihal !== originalData.perihal ||
+      alamatPengirim !== originalData.alamatPengirim ||
+      tanggalTerima !== originalData.tanggalTerima ||
+      sifatSurat !== originalData.sifatSurat ||
+      file !== null
+    );
+  };
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -61,12 +78,7 @@ const EditSuratMasuk = () => {
       formData.append("alamatPengirim", alamatPengirim);
       formData.append("tanggalTerima", tanggalTerima);
       formData.append("sifatSurat", sifatSurat);
-      formData.append("disposisi", disposisi);
-      formData.append("isiDisposisi", isiDisposisi);
-
-      if (file) {
-        formData.append("fileUrl", file);
-      }
+      if (file) formData.append("fileUrl", file);
 
       const response = await fetch(
         `http://localhost:2000/api/surat-masuk/${id}`,
@@ -90,7 +102,6 @@ const EditSuratMasuk = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <Navigasi />
 
       <main className="flex-1 p-8">
@@ -105,7 +116,18 @@ const EditSuratMasuk = () => {
             </button>
           </div>
 
-          <h2 className="text-2xl font-bold mt-4">Edit Surat Masuk</h2>
+          <div className="flex flex-row justify-between items-center w-full">
+            <h2 className="text-2xl font-bold mt-4"> Edit Surat Masuk</h2>
+            <img
+              src="/back.png"
+              alt="back"
+              width="20px"
+              className="mt-5"
+              onClick={() => {
+                navigate("/admin/rekap-surat-masuk");
+              }}
+            />
+          </div>
         </div>
 
         <div className="flex min-h-screen">
@@ -138,7 +160,6 @@ const EditSuratMasuk = () => {
               onChange={(e) => setTanggalTerima(e.target.value)}
             />
 
-            {/* Dropdown Select for Sifat Surat */}
             <div className="flex items-center gap-4 mb-4">
               <p className="font-medium w-64">Sifat Surat</p>
               <select
@@ -147,13 +168,12 @@ const EditSuratMasuk = () => {
                 onChange={(e) => setSifatSurat(e.target.value)}
               >
                 <option value="">Pilih</option>
-                <option value="Sangat Segera">Sangat Segera</option>
+                <option value="SangatSegera">Sangat Segera</option>
                 <option value="Segera">Segera</option>
                 <option value="Biasa">Biasa</option>
               </select>
             </div>
 
-            {/* File Upload */}
             <label className="w-full p-6 border rounded-md text-center bg-white text-black shadow cursor-pointer">
               {file ? file.name : "Pilih file baru untuk upload (optional)"}
               <input
@@ -163,24 +183,16 @@ const EditSuratMasuk = () => {
               />
             </label>
 
-            <InputForm
-              label="Disposisi"
-              placeholder="Masukkan Disposisi"
-              value={disposisi}
-              onChange={(e) => setDisposisi(e.target.value)}
-            />
-            <InputForm
-              label="Isi Disposisi"
-              placeholder="Masukkan Isi Disposisi"
-              value={isiDisposisi}
-              onChange={(e) => setIsiDisposisi(e.target.value)}
-            />
-
             <button
               type="submit"
-              className="mt-4 bg-gray-300 hover:bg-gray-400 text-black py-2 rounded-md"
+              disabled={!isChanged()}
+              className={`mt-4 py-2 rounded-md ${
+                isChanged()
+                  ? "bg-gray-300 hover:bg-gray-400 text-black"
+                  : "bg-gray-200 text-gray-500 cursor-not-allowed"
+              }`}
             >
-              Update Surat
+              Perbarui
             </button>
           </form>
         </div>
