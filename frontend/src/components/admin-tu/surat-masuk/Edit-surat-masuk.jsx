@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "../Navigasi";
 import InputForm from "../../InputForm";
 import Logout from "../../Logout";
+import UpdateAlert from "../UpdateAlert"; // ✅ pastikan path ini sesuai
 
 const EditSuratMasuk = () => {
   const navigate = useNavigate();
@@ -14,8 +15,9 @@ const EditSuratMasuk = () => {
   const [alamatPengirim, setAlamatPengirim] = useState("");
   const [tanggalTerima, setTanggalTerima] = useState("");
   const [sifatSurat, setSifatSurat] = useState("");
+  const [originalData, setOriginalData] = useState(null);
 
-  const [originalData, setOriginalData] = useState(null); // simpan nilai asli
+  const [showSuccess, setShowSuccess] = useState(false); // ✅ modal control
 
   useEffect(() => {
     const fetchSurat = async () => {
@@ -32,7 +34,6 @@ const EditSuratMasuk = () => {
         setTanggalTerima(data.tanggalTerima.slice(0, 10));
         setSifatSurat(data.sifatSurat);
 
-        // simpan data asli
         setOriginalData({
           noSurat: data.noSurat,
           perihal: data.perihal,
@@ -64,11 +65,6 @@ const EditSuratMasuk = () => {
     setFile(e.target.files[0]);
   };
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    navigate("/login");
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -90,8 +86,7 @@ const EditSuratMasuk = () => {
       );
 
       if (response.ok) {
-        alert("Surat Masuk berhasil diupdate!");
-        navigate("/admin/rekap-surat-masuk");
+        setShowSuccess(true); // ✅ tampilkan modal
       } else {
         alert("Terjadi kesalahan saat mengupdate Surat Masuk.");
       }
@@ -101,33 +96,34 @@ const EditSuratMasuk = () => {
     }
   };
 
+  const handleCloseAlert = () => {
+    setShowSuccess(false);
+    navigate("/admin/rekap-surat-masuk");
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Navigasi />
 
-      <main className="flex-1 p-8">
-        <div className="flex flex-col items-start justify-between mb-6">
-          <div className="flex items-center gap-4 ml-auto">
-            <Logout />
-          </div>
+      <div className="flex-1 flex flex-col">
+        <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-30">
+          <Logout />
+        </div>
 
-          <div className="flex flex-row justify-between items-center w-full">
-            <h2 className="text-2xl font-bold mt-4"> Edit Surat Masuk</h2>
+        <main className="flex-1 p-8">
+          <div className="flex justify-between items-center mt-6 mb-6">
+            <h2 className="text-2xl font-bold">Edit Surat Masuk</h2>
             <img
               src="/back.png"
               alt="back"
               width="20px"
-              className="mt-5"
-              onClick={() => {
-                navigate("/admin/rekap-surat-masuk");
-              }}
+              className="cursor-pointer"
+              onClick={() => navigate("/admin/rekap-surat-masuk")}
             />
           </div>
-        </div>
 
-        <div className="flex min-h-screen">
           <form
-            className="flex flex-col gap-2 w-xl max-w-full"
+            className="flex flex-col gap-4 w-full max-w-3xl bg-white rounded-lg shadow-md p-6"
             onSubmit={handleSubmit}
           >
             <InputForm
@@ -155,7 +151,7 @@ const EditSuratMasuk = () => {
               onChange={(e) => setTanggalTerima(e.target.value)}
             />
 
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-4">
               <p className="font-medium w-64">Sifat Surat</p>
               <select
                 className="w-full p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
@@ -190,8 +186,11 @@ const EditSuratMasuk = () => {
               Perbarui
             </button>
           </form>
-        </div>
-      </main>
+        </main>
+      </div>
+
+      {/* ✅ Modal Alert */}
+      {showSuccess && <UpdateAlert onClose={handleCloseAlert} />}
     </div>
   );
 };

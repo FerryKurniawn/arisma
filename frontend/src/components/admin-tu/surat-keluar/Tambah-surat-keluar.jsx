@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Navigasi from "../Navigasi";
 import { useNavigate } from "react-router-dom";
-import "react-datepicker/dist/react-datepicker.css"; // optional, if datepicker used
+import "react-datepicker/dist/react-datepicker.css";
 import Logout from "../../Logout";
+import SuccessAlert from "../SuccessAlert"; // ✅ Import SuccessAlert
 
 const TambahSuratKeluar = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const TambahSuratKeluar = () => {
   const [perihal, setPerihal] = useState("");
   const [noPetunjuk, setNoPetunjuk] = useState("");
   const [noPaket, setNoPaket] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false); // ✅ Tambahkan state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,8 +40,7 @@ const TambahSuratKeluar = () => {
       });
 
       if (response.ok) {
-        alert("Surat Keluar berhasil ditambahkan!");
-        navigate("/admin/rekap-surat-keluar");
+        setShowSuccess(true); // ✅ Tampilkan alert sukses
       } else {
         alert("Terjadi kesalahan saat menambahkan Surat Keluar.");
       }
@@ -64,7 +65,7 @@ const TambahSuratKeluar = () => {
               src="/back.png"
               alt="back"
               width="20px"
-              className="mt-5"
+              className="mt-5 cursor-pointer"
               onClick={() => {
                 navigate("/admin/rekap-surat-keluar");
               }}
@@ -168,6 +169,18 @@ const TambahSuratKeluar = () => {
             </button>
           </form>
         </div>
+
+        {/* ✅ Success alert muncul jika surat berhasil ditambahkan */}
+        {showSuccess && (
+          <div className="fixed inset-0 flex justify-center items-center z-50">
+            <SuccessAlert
+              onClose={() => {
+                setShowSuccess(false);
+                navigate("/admin/rekap-surat-keluar");
+              }}
+            />
+          </div>
+        )}
       </main>
     </div>
   );

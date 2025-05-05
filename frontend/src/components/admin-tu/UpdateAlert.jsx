@@ -1,6 +1,6 @@
 import React from "react";
 
-const SuccessAlert = ({ onClose }) => {
+const UpdateAlert = ({ onClose }) => {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
@@ -16,7 +16,7 @@ const SuccessAlert = ({ onClose }) => {
           </div>
         </div>
         <p className="text-lg font-semibold text-center text-gray-900">
-          Berhasil Ditambahkan!
+          Data berhasil diperbarui!
         </p>
         <div className="w-full">
           <button
@@ -31,4 +31,4 @@ const SuccessAlert = ({ onClose }) => {
   );
 };
 
-export default SuccessAlert;
+export default UpdateAlert;

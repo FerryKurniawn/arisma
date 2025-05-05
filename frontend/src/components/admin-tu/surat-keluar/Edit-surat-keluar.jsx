@@ -14,8 +14,8 @@ const EditSuratKeluar = () => {
   const [tanggalKeluar, setTanggalKeluar] = useState("");
   const [perihal, setPerihal] = useState("");
   const [noPetunjuk, setNoPetunjuk] = useState("");
-  const [originalData, setOriginalData] = useState(null);
   const [noPaket, setNoPaket] = useState("");
+  const [originalData, setOriginalData] = useState(null);
 
   useEffect(() => {
     const fetchSurat = async () => {
@@ -36,7 +36,6 @@ const EditSuratKeluar = () => {
         setNoPetunjuk(data.noPetunjuk);
         setNoPaket(data.noPaket);
 
-        // ⬇️ Harus tetap di dalam sini
         setOriginalData({
           noSurat: data.noSurat,
           noBerkas: data.noBerkas,
@@ -107,27 +106,24 @@ const EditSuratKeluar = () => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Navigasi />
-      <main className="flex-1 p-8">
-        <div className="flex flex-col items-start justify-between mb-6">
-          <div className="flex items-center gap-4 ml-auto">
-            <Logout />
-          </div>
 
-          <div className="flex flex-row justify-between items-center w-full">
-            <h2 className="text-2xl font-bold mt-4"> Edit Surat keluar</h2>
+      <div className="flex-1 flex flex-col">
+        <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-30">
+          <Logout />
+        </div>
+
+        <main className="flex-1 p-8">
+          <div className="flex justify-between items-center mt-6 mb-6">
+            <h2 className="text-2xl font-bold">Edit Surat Keluar</h2>
             <img
               src="/back.png"
               alt="back"
               width="20px"
-              className="mt-5"
-              onClick={() => {
-                navigate("/admin/rekap-surat-keluar");
-              }}
+              className="cursor-pointer"
+              onClick={() => navigate("/admin/rekap-surat-keluar")}
             />
           </div>
-        </div>
 
-        <div className="flex min-h-screen">
           <form
             className="flex flex-col gap-2 w-xl max-w-full"
             onSubmit={handleSubmit}
@@ -179,15 +175,15 @@ const EditSuratKeluar = () => {
               disabled={!isChanged()}
               className={`mt-4 py-2 rounded-md ${
                 isChanged()
-                  ? "bg-gray-300 hover:bg-gray-400 text-black"
-                  : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  ? "bg-[#34542C] hover:bg-[#34542C] text-black"
+                  : "bg-[#34542C] opacity-70 text-gray-500 cursor-not-allowed"
               }`}
             >
-              Update Surat
+              Perbarui Surat
             </button>
           </form>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };

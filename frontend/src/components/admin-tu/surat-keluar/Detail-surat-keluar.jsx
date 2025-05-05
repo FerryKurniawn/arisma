@@ -34,63 +34,62 @@ const DetailSuratKeluar = () => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Navigasi />
-      <main className="flex-1 p-8">
-        <div className="flex flex-col items-start justify-between mb-6">
-          <div className="flex items-center gap-4 ml-auto">
-            <Logout />
-          </div>
 
-          <div className="flex flex-row justify-between items-center w-full">
-            <h2 className="text-2xl font-bold mt-4">Surat Masuk</h2>
-            <img
-              src="/back.png"
-              alt="back"
-              width="20px"
-              className="mt-5"
-              onClick={() => {
-                navigate("/admin/rekap-surat-masuk");
-              }}
-            />
-          </div>
+      <div className="flex-1 flex flex-col">
+        {/* Sticky Logout Bar */}
+        <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-30">
+          <Logout />
         </div>
 
-        {loading ? (
-          <p>Loading data surat keluar...</p>
-        ) : surat ? (
-          <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-3xl">
-            <div className="mb-4">
-              <h3 className="font-semibold">No. Surat</h3>
-              <p>{surat.noSurat ?? "null"}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">No. Berkas</h3>
-              <p>{surat.noBerkas ?? "null"}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">Alamat Penerima</h3>
-              <p>{surat.alamatPenerima ?? "null"}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">Tanggal Keluar</h3>
-              <p>{surat.tanggalKeluar?.slice(0, 10) ?? "null"}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">Perihal</h3>
-              <p>{surat.perihal ?? "null"}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">No. Petunjuk</h3>
-              <p>{surat.noPetunjuk ?? "null"}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="font-semibold">No. Paket</h3>
-              <p>{surat.noPaket ?? "null"}</p>
-            </div>
+        <main className="flex-1 p-8">
+          <div className="flex justify-between items-center mt-6 mb-6">
+            <h2 className="text-2xl font-bold">Detail Surat Keluar</h2>
+            <button
+              onClick={() => navigate("/admin/rekap-surat-keluar")}
+              className="text-sm text-gray-600 hover:text-black transition"
+            >
+              <img src="/back.png" alt="Back" width="20px" />
+            </button>
           </div>
-        ) : (
-          <p>Data surat keluar tidak ditemukan pada id {id}.</p>
-        )}
-      </main>
+
+          {loading ? (
+            <p>Loading data surat keluar...</p>
+          ) : surat ? (
+            <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-3xl">
+              <div className="mb-4">
+                <h3 className="font-semibold">No. Surat</h3>
+                <p>{surat.noSurat ?? "null"}</p>
+              </div>
+              <div className="mb-4">
+                <h3 className="font-semibold">No. Berkas</h3>
+                <p>{surat.noBerkas ?? "null"}</p>
+              </div>
+              <div className="mb-4">
+                <h3 className="font-semibold">Alamat Penerima</h3>
+                <p>{surat.alamatPenerima ?? "null"}</p>
+              </div>
+              <div className="mb-4">
+                <h3 className="font-semibold">Tanggal Keluar</h3>
+                <p>{surat.tanggalKeluar?.slice(0, 10) ?? "null"}</p>
+              </div>
+              <div className="mb-4">
+                <h3 className="font-semibold">Perihal</h3>
+                <p>{surat.perihal ?? "null"}</p>
+              </div>
+              <div className="mb-4">
+                <h3 className="font-semibold">No. Petunjuk</h3>
+                <p>{surat.noPetunjuk ?? "null"}</p>
+              </div>
+              <div className="mb-4">
+                <h3 className="font-semibold">No. Paket</h3>
+                <p>{surat.noPaket ?? "null"}</p>
+              </div>
+            </div>
+          ) : (
+            <p>Data surat keluar tidak ditemukan pada id {id}.</p>
+          )}
+        </main>
+      </div>
     </div>
   );
 };
