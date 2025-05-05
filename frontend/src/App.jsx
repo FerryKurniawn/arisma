@@ -14,55 +14,98 @@ import Tambahsuratkeluaradmin from "./components/admin-tu/surat-keluar/Tambah-su
 import Suratmasukkepsek from "./components/kepsek/Surat-masuk";
 import Detailsuratmasukkepsek from "./components/kepsek/Detail-surat-masuk";
 
+import Success from "./components/admin-tu/SuccessAlert";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           {/* Admin TU */}
           {/* Surat Masuk*/}
           <Route
             path="/admin/rekap-surat-masuk"
-            element={<Rekapsuratmasukadmin />}
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <Rekapsuratmasukadmin />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/admin/tambah-surat-masuk"
-            element={<Tambahsuratmasukadmin />}
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <Tambahsuratmasukadmin />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/admin/edit-surat-masuk/:id"
-            element={<Editsuratmasukadmin />}
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <Editsuratmasukadmin />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/admin/detail-surat-masuk/:id"
-            element={<Detailsuratmasukadmin />}
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <Detailsuratmasukadmin />
+              </ProtectedRoute>
+            }
           />
           {/* Admin TU Surat Keluar */}
           <Route
             path="/admin/rekap-surat-keluar"
-            element={<Rekapsuratkeluaradmin />}
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <Rekapsuratkeluaradmin />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/admin/edit-surat-keluar/:id"
-            element={<Editsuratkeluaradmin />}
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <Editsuratkeluaradmin />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/admin/detail-surat-keluar/:id"
-            element={<Detailsuratkeluaradmin />}
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <Detailsuratkeluaradmin />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/admin/tambah-surat-keluar"
-            element={<Tambahsuratkeluaradmin />}
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <Tambahsuratkeluaradmin />
+              </ProtectedRoute>
+            }
           />
           {/* Kepsek */}
           <Route
             path="/kepsek/rekap-surat-masuk"
-            element={<Suratmasukkepsek />}
+            element={
+              <ProtectedRoute allowedRoles={["KEPSEK"]}>
+                <Suratmasukkepsek />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/kepsek/detail-surat-masuk/:id"
-            element={<Detailsuratmasukkepsek />}
+            element={
+              <ProtectedRoute allowedRoles={["KEPSEK"]}>
+                <Detailsuratmasukkepsek />
+              </ProtectedRoute>
+            }
           />
         </Routes>
       </BrowserRouter>

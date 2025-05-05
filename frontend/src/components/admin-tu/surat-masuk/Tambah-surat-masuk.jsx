@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Navigasi from "../Navigasi";
 import { useNavigate } from "react-router-dom";
-import InputForm from "../../InputForm";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import CSS untuk DatePicker
 import { format } from "date-fns";
+import SuccessAlert from "../SuccessAlert"; // sesuaikan path jika perlu
 
 const TambahSuratMasuk = () => {
   const navigate = useNavigate();
@@ -15,18 +15,12 @@ const TambahSuratMasuk = () => {
   const [alamatPengirim, setAlamatPengirim] = useState("");
   const [tanggalTerima, setTanggalTerima] = useState(null);
   const [sifatSurat, setSifatSurat] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
 
-  // handle Logout
-  const handleLogout = (e) => {
-    e.preventDefault();
-    navigate("/login");
-  };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -34,9 +28,9 @@ const TambahSuratMasuk = () => {
     formData.append("noSurat", noSurat);
     formData.append("perihal", perihal);
     formData.append("alamatPengirim", alamatPengirim);
-    formData.append("tanggalTerima", format(tanggalTerima, "dd-MM-yyyy")); // Format tanggal
+    formData.append("tanggalTerima", format(tanggalTerima, "dd-MM-yyyy"));
     formData.append("sifatSurat", sifatSurat);
-    formData.append("fileUrl", file); // appending file
+    formData.append("fileUrl", file);
 
     try {
       const response = await fetch("http://localhost:2000/api/surat-masuk", {
@@ -45,14 +39,12 @@ const TambahSuratMasuk = () => {
       });
 
       if (response.ok) {
-        alert("Surat Masuk berhasil ditambahkan!");
-        navigate("/admin/rekap-surat-masuk"); // Navigate to a different page (like dashboard)
+        setShowSuccess(true);
       } else {
-        alert("Terjadi kesalahan saat menambahkan Surat Masuk.");
+        console.error("Gagal menambahkan surat.");
       }
     } catch (error) {
-      console.error("Error adding SuratMasuk:", error);
-      alert("Terjadi kesalahan saat menghubungi server.");
+      console.error("Terjadi error:", error);
     }
   };
 
@@ -64,13 +56,7 @@ const TambahSuratMasuk = () => {
       <main className="flex-1 p-8">
         <div className="flex flex-col items-start justify-between mb-6">
           <div className="flex items-center gap-4 ml-auto">
-            <span className="text-sm font-medium">Admin TU 1</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <Logout />
           </div>
           <div className="flex flex-row justify-between items-center w-full">
             <h2 className="text-2xl font-bold mt-4">Tambah Surat Masuk</h2>
@@ -161,17 +147,21 @@ const TambahSuratMasuk = () => {
             {/* File Upload */}
             <div className="flex items-center gap-4">
               <label className="font-medium w-64">File Upload</label>
-              <label className="flex-1 p-6 rounded-md text-center bg-white text-black shadow cursor-pointer">
+              <label
+                className="flex-1 p-6 rounded-md text-center bg-white text-black shadow cursor-pointer"
+                htmlFor="fileInput"
+              >
                 {file
                   ? file.name
                   : "Choose files or drag and drop files to upload"}
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileChange}
-                  required
-                />
               </label>
+              <input
+                type="file"
+                id="fileInput" // Make sure the label uses the 'for' attribute that matches this id
+                className="hidden"
+                onChange={handleFileChange}
+                required
+              />
             </div>
 
             <button
@@ -182,6 +172,17 @@ const TambahSuratMasuk = () => {
             </button>
           </form>
         </div>
+
+        {showSuccess && (
+          <div className="fixed inset-0 flex justify-center items-center z-50">
+            <SuccessAlert
+              onClose={() => {
+                setShowSuccess(false);
+                navigate("/admin/rekap-surat-masuk");
+              }}
+            />
+          </div>
+        )}
       </main>
     </div>
   );

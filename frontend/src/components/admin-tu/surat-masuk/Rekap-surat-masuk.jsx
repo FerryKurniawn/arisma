@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Navigasi from "../Navigasi";
+import Logout from "../../Logout";
 import { useNavigate } from "react-router-dom";
-import Delete from "./Delete";
+import Delete from "../Delete";
 
 const RekapSuratMasuk = () => {
   const navigate = useNavigate();
@@ -22,18 +23,13 @@ const RekapSuratMasuk = () => {
     fetchSuratKeluar();
   }, []);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    navigate("/login");
-  };
-
   const handleDelete = async (id) => {
     try {
       const res = await fetch(`http://localhost:2000/api/surat-masuk/${id}`, {
         method: "DELETE",
       });
       if (res.ok) {
-        fetchSuratKeluar(); // Refresh data
+        fetchSuratKeluar();
       } else {
         alert("Gagal menghapus surat.");
       }
@@ -58,13 +54,7 @@ const RekapSuratMasuk = () => {
       <main className="flex-1 p-8 relative">
         <div className="flex flex-col mb-6 bg-white">
           <div className="flex items-center gap-4 ml-auto mb-5">
-            <span className="text-sm font-medium">Admin TU</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <Logout />
           </div>
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold">Rekap Surat Masuk</h2>
@@ -148,13 +138,25 @@ const RekapSuratMasuk = () => {
                   </td>
                 </tr>
               ) : (
-                dataSurat.map((surat) => (
-                  <tr key={surat.id} className="border-t">
+                dataSurat.map((surat, index) => (
+                  <tr
+                    key={surat.id}
+                    className="border-t"
+                    style={
+                      index % 2 === 0
+                        ? { backgroundColor: "rgba(217, 217, 217, 0.5)" }
+                        : {}
+                    }
+                  >
                     <td className="p-3 text-center">{surat.noSurat}</td>
                     <td className="p-3 text-center">{surat.perihal}</td>
                     <td className="p-3 text-center">{surat.alamatPengirim}</td>
                     <td className="p-3 text-center">{surat.tanggalTerima}</td>
-                    <td className="p-3 text-center">{surat.sifatSurat}</td>
+                    <td className="p-3 text-center">
+                      {surat.sifatSurat === "SangatSegera"
+                        ? "Sangat Segera"
+                        : surat.sifatSurat}
+                    </td>
                     <td className="p-3 text-center">
                       {surat.disposisi || "-"}
                     </td>
@@ -204,7 +206,6 @@ const RekapSuratMasuk = () => {
           </button>
         </div>
 
-        {/* Delete Modal */}
         {showDeleteModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <Delete

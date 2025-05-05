@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "../Navigasi";
+import Logout from "../../Logout";
 import InputForm from "../../InputForm";
 
 const EditSuratKeluar = () => {
@@ -13,6 +14,7 @@ const EditSuratKeluar = () => {
   const [tanggalKeluar, setTanggalKeluar] = useState("");
   const [perihal, setPerihal] = useState("");
   const [noPetunjuk, setNoPetunjuk] = useState("");
+  const [originalData, setOriginalData] = useState(null);
   const [noPaket, setNoPaket] = useState("");
 
   useEffect(() => {
@@ -33,6 +35,17 @@ const EditSuratKeluar = () => {
         setPerihal(data.perihal);
         setNoPetunjuk(data.noPetunjuk);
         setNoPaket(data.noPaket);
+
+        // ⬇️ Harus tetap di dalam sini
+        setOriginalData({
+          noSurat: data.noSurat,
+          noBerkas: data.noBerkas,
+          alamatPenerima: data.alamatPenerima,
+          tanggalKeluar: data.tanggalKeluar.slice(0, 10),
+          perihal: data.perihal,
+          noPetunjuk: data.noPetunjuk,
+          noPaket: data.noPaket,
+        });
       } catch (error) {
         console.error("Error fetching surat keluar:", error);
       }
@@ -41,9 +54,17 @@ const EditSuratKeluar = () => {
     fetchSurat();
   }, [id]);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    navigate("/login");
+  const isChanged = () => {
+    if (!originalData) return false;
+    return (
+      noSurat !== originalData.noSurat ||
+      noBerkas !== originalData.noBerkas ||
+      alamatPenerima !== originalData.alamatPenerima ||
+      tanggalKeluar !== originalData.tanggalKeluar ||
+      perihal !== originalData.perihal ||
+      noPetunjuk !== originalData.noPetunjuk ||
+      noPaket !== originalData.noPaket
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -89,16 +110,21 @@ const EditSuratKeluar = () => {
       <main className="flex-1 p-8">
         <div className="flex flex-col items-start justify-between mb-6">
           <div className="flex items-center gap-4 ml-auto">
-            <span className="text-sm font-medium">Admin TU</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <Logout />
           </div>
 
-          <h2 className="text-2xl font-bold mt-4">Edit Surat Keluar</h2>
+          <div className="flex flex-row justify-between items-center w-full">
+            <h2 className="text-2xl font-bold mt-4"> Edit Surat keluar</h2>
+            <img
+              src="/back.png"
+              alt="back"
+              width="20px"
+              className="mt-5"
+              onClick={() => {
+                navigate("/admin/rekap-surat-keluar");
+              }}
+            />
+          </div>
         </div>
 
         <div className="flex min-h-screen">
@@ -126,7 +152,7 @@ const EditSuratKeluar = () => {
             />
             <InputForm
               label="Tanggal Keluar"
-              placeholder="YYYY-MM-DD"
+              type="date"
               value={tanggalKeluar}
               onChange={(e) => setTanggalKeluar(e.target.value)}
             />
@@ -148,10 +174,14 @@ const EditSuratKeluar = () => {
               value={noPaket}
               onChange={(e) => setNoPaket(e.target.value)}
             />
-
             <button
               type="submit"
-              className="mt-4 bg-gray-300 hover:bg-gray-400 text-black py-2 rounded-md"
+              disabled={!isChanged()}
+              className={`mt-4 py-2 rounded-md ${
+                isChanged()
+                  ? "bg-gray-300 hover:bg-gray-400 text-black"
+                  : "bg-gray-200 text-gray-500 cursor-not-allowed"
+              }`}
             >
               Update Surat
             </button>

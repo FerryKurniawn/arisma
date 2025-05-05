@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Navigasi from "../Navigasi";
-import InputForm from "../../InputForm";
+import { useNavigate } from "react-router-dom";
+import "react-datepicker/dist/react-datepicker.css"; // optional, if datepicker used
+import Logout from "../../Logout";
 
 const TambahSuratKeluar = () => {
   const navigate = useNavigate();
@@ -13,11 +14,6 @@ const TambahSuratKeluar = () => {
   const [perihal, setPerihal] = useState("");
   const [noPetunjuk, setNoPetunjuk] = useState("");
   const [noPaket, setNoPaket] = useState("");
-
-  const handleLogout = (e) => {
-    e.preventDefault();
-    navigate("/login");
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,74 +52,119 @@ const TambahSuratKeluar = () => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Navigasi />
+
       <main className="flex-1 p-8">
         <div className="flex flex-col items-start justify-between mb-6">
           <div className="flex items-center gap-4 ml-auto">
-            <span className="text-sm font-medium">Admin TU</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <Logout />
           </div>
-
-          <h2 className="text-2xl font-bold mt-4">Tambah Surat Keluar</h2>
+          <div className="flex flex-row justify-between items-center w-full">
+            <h2 className="text-2xl font-bold mt-4">Tambah Surat Keluar</h2>
+            <img
+              src="/back.png"
+              alt="back"
+              width="20px"
+              className="mt-5"
+              onClick={() => {
+                navigate("/admin/rekap-surat-keluar");
+              }}
+            />
+          </div>
         </div>
 
         <div className="flex min-h-screen">
           <form
-            className="flex flex-col gap-2 w-xl max-w-full"
+            className="flex flex-col gap-4 w-full max-w-4xl"
             onSubmit={handleSubmit}
           >
-            <InputForm
-              label="No. Surat"
-              placeholder="Masukkan No. Surat"
-              value={noSurat}
-              onChange={(e) => setNoSurat(e.target.value)}
-            />
-            <InputForm
-              label="No. Berkas"
-              placeholder="Masukkan No. Berkas"
-              value={noBerkas}
-              onChange={(e) => setNoBerkas(e.target.value)}
-            />
-            <InputForm
-              label="Alamat Penerima"
-              placeholder="Masukkan Alamat Penerima"
-              value={alamatPenerima}
-              onChange={(e) => setAlamatPenerima(e.target.value)}
-            />
-            <InputForm
-              label="Tanggal Keluar"
-              placeholder="YYYY-MM-DD"
-              value={tanggalKeluar}
-              onChange={(e) => setTanggalKeluar(e.target.value)}
-            />
-            <InputForm
-              label="Perihal"
-              placeholder="Masukkan Perihal"
-              value={perihal}
-              onChange={(e) => setPerihal(e.target.value)}
-            />
-            <InputForm
-              label="No. Petunjuk"
-              placeholder="Masukkan No. Petunjuk"
-              value={noPetunjuk}
-              onChange={(e) => setNoPetunjuk(e.target.value)}
-            />
-            <InputForm
-              label="No. Paket"
-              placeholder="Masukkan No. Paket"
-              value={noPaket}
-              onChange={(e) => setNoPaket(e.target.value)}
-            />
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">No. Surat</label>
+              <input
+                type="text"
+                placeholder="Masukkan No. Surat"
+                value={noSurat}
+                onChange={(e) => setNoSurat(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">No. Berkas</label>
+              <input
+                type="text"
+                placeholder="Masukkan No. Berkas"
+                value={noBerkas}
+                onChange={(e) => setNoBerkas(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">Alamat Penerima</label>
+              <input
+                type="text"
+                placeholder="Masukkan Alamat Penerima"
+                value={alamatPenerima}
+                onChange={(e) => setAlamatPenerima(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">Tanggal Keluar</label>
+              <input
+                type="date"
+                value={tanggalKeluar}
+                onChange={(e) => setTanggalKeluar(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">Perihal</label>
+              <input
+                type="text"
+                placeholder="Masukkan Perihal"
+                value={perihal}
+                onChange={(e) => setPerihal(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">No. Petunjuk</label>
+              <input
+                type="text"
+                placeholder="Masukkan No. Petunjuk"
+                value={noPetunjuk}
+                onChange={(e) => setNoPetunjuk(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="font-medium w-64">No. Paket</label>
+              <input
+                type="text"
+                placeholder="Masukkan No. Paket"
+                value={noPaket}
+                onChange={(e) => setNoPaket(e.target.value)}
+                className="flex-1 p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
+                required
+              />
+            </div>
 
             <button
               type="submit"
-              className="mt-4 bg-gray-300 hover:bg-gray-400 text-black py-2 rounded-md"
+              className="self-start mt-4 bg-gray-300 hover:bg-gray-400 text-black py-2 px-6 rounded-md"
             >
-              Tambah Surat
+              Tambah
             </button>
           </form>
         </div>

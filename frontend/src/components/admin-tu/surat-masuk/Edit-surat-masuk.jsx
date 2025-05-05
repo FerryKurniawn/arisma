@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "../Navigasi";
 import InputForm from "../../InputForm";
+import Logout from "../../Logout";
 
 const EditSuratMasuk = () => {
   const navigate = useNavigate();
@@ -107,13 +108,7 @@ const EditSuratMasuk = () => {
       <main className="flex-1 p-8">
         <div className="flex flex-col items-start justify-between mb-6">
           <div className="flex items-center gap-4 ml-auto">
-            <span className="text-sm font-medium">Admin TU 1</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <Logout />
           </div>
 
           <div className="flex flex-row justify-between items-center w-full">

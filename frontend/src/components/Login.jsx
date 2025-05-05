@@ -23,10 +23,8 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.status === 200) {
-        console.log(data); // Lihat apakah `role` ada di sini
-        localStorage.setItem("token", data.token); // Simpan token di localStorage
-
-        // Cek role dan arahkan ke halaman yang sesuai
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
         if (data.user.role == "ADMIN") {
           navigate("/admin/rekap-surat-masuk");
         } else if (data.user.role == "KEPSEK") {
@@ -46,14 +44,16 @@ export default function LoginPage() {
     <div className="flex justify-center items-center h-screen">
       <div className="bg-white shadow-lg rounded-lg flex p-10 max-w-4xl w-full relative z-10">
         <div className="flex justify-center items-center w-1/2">
-          <img src="man1.png" alt="Logo" className="w-80" />
+          <img src="man1.png" alt="Logo" className="w-65" />
         </div>
 
         <div className="w-1/2 px-6">
-          <h2 className="text-center text-lg font-semibold">Selamat Datang</h2>
-          <p className="text-center mt-2 text-gray-700">
-            Halo, Selamat Datang di <strong>ARISMA</strong> (
-            <strong>ARSIP DIGITAL MADRASAH ALIYAH NEGERI 1</strong>).
+          <p className="text-center mt-2 text-gray-700 flex flex-col">
+            <strong className="text-[25px]">ARISMA</strong>
+            <strong className="text-[20 px]">
+              (ARSIP DIGITAL MADRASAH ALIYAH NEGERI 1 SINTANG)
+            </strong>
+            .
           </p>
           <form className="mt-6" onSubmit={handleLogin}>
             <div className="mb-4">

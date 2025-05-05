@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Navigasi from "../Navigasi";
+import Delete from "../Delete";
+import Logout from "../../Logout";
 import { useNavigate } from "react-router-dom";
 
-const RekapSuaraKeluar = () => {
+const RekapSuratKeluar = () => {
   const navigate = useNavigate();
   const [dataSurat, setDataSurat] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const fetchSuratKeluar = () => {
     fetch("http://localhost:2000/api/surat-keluar")
@@ -19,30 +23,28 @@ const RekapSuaraKeluar = () => {
     fetchSuratKeluar();
   }, []);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    navigate("/login");
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:2000/api/surat-keluar/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        fetchSuratKeluar(); // Refresh data
+      } else {
+        alert("Gagal menghapus surat.");
+      }
+    } catch (err) {
+      console.error("Error saat hapus surat:", err);
+      alert("Terjadi kesalahan.");
+    } finally {
+      setShowDeleteModal(false);
+      setSelectedId(null);
+    }
   };
 
-  const handleDelete = async (id) => {
-    if (confirm("Yakin ingin menghapus surat ini?")) {
-      try {
-        const res = await fetch(
-          `http://localhost:2000/api/surat-keluar/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
-        if (res.ok) {
-          fetchSuratKeluar(); // Refresh data
-        } else {
-          alert("Gagal menghapus surat.");
-        }
-      } catch (err) {
-        console.error("Error saat hapus surat:", err);
-        alert("Terjadi kesalahan.");
-      }
-    }
+  const openDeleteModal = (id) => {
+    setSelectedId(id);
+    setShowDeleteModal(true);
   };
 
   return (
@@ -52,13 +54,7 @@ const RekapSuaraKeluar = () => {
       <main className="flex-1 p-8">
         <div className="flex flex-col mb-6">
           <div className="flex items-center gap-4 ml-auto mb-5">
-            <span className="text-sm font-medium">Admin TU</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <Logout />
           </div>
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold">Rekap Surat Keluar</h2>
@@ -104,11 +100,10 @@ const RekapSuaraKeluar = () => {
                 </th>
                 <th
                   className="p-10 text-center font-semibold"
-                  style={{ width: "200px" }} // Membesarkan kolom Tanggal Terima
+                  style={{ width: "200px" }}
                 >
-                  Tanggal keluar
+                  Tanggal Keluar
                 </th>
-
                 <th
                   className="p-3 text-center font-semibold"
                   style={{ width: "150px" }}
@@ -143,8 +138,16 @@ const RekapSuaraKeluar = () => {
                   </td>
                 </tr>
               ) : (
-                dataSurat.map((surat) => (
-                  <tr key={surat.id} className="border-t">
+                dataSurat.map((surat, index) => (
+                  <tr
+                    key={surat.id}
+                    className="border-t"
+                    style={
+                      index % 2 === 0
+                        ? { backgroundColor: "rgba(217, 217, 217, 0.5)" }
+                        : {}
+                    }
+                  >
                     <td className="p-3 text-center">{surat.noSurat}</td>
                     <td className="p-3 text-center">{surat.noBerkas}</td>
                     <td className="p-3 text-center">{surat.alamatPenerima}</td>
@@ -175,7 +178,7 @@ const RekapSuaraKeluar = () => {
                       >
                         <img src="/pencil.png" width="15" alt="Edit" />
                       </button>
-                      <button onClick={() => handleDelete(surat.id)}>
+                      <button onClick={() => openDeleteModal(surat.id)}>
                         <img src="/trash-can.png" width="15" alt="Delete" />
                       </button>
                     </td>
@@ -194,9 +197,21 @@ const RekapSuaraKeluar = () => {
             Tambah
           </button>
         </div>
+
+        {showDeleteModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <Delete
+              onDelete={() => handleDelete(selectedId)}
+              onCancel={() => {
+                setShowDeleteModal(false);
+                setSelectedId(null);
+              }}
+            />
+          </div>
+        )}
       </main>
     </div>
   );
 };
 
-export default RekapSuaraKeluar;
+export default RekapSuratKeluar;

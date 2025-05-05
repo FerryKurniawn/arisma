@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "../Navigasi";
+import Logout from "../../Logout";
 
 const DetailSuratKeluar = () => {
   const navigate = useNavigate();
@@ -30,26 +31,27 @@ const DetailSuratKeluar = () => {
     fetchSurat();
   }, [id]);
 
-  const handleLogout = () => {
-    navigate("/login");
-  };
-
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Navigasi />
       <main className="flex-1 p-8">
         <div className="flex flex-col items-start justify-between mb-6">
           <div className="flex items-center gap-4 ml-auto">
-            <span className="text-sm font-medium">Admin TU</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <Logout />
           </div>
 
-          <h2 className="text-2xl font-bold mt-4">Detail Surat Keluar</h2>
+          <div className="flex flex-row justify-between items-center w-full">
+            <h2 className="text-2xl font-bold mt-4">Surat Masuk</h2>
+            <img
+              src="/back.png"
+              alt="back"
+              width="20px"
+              className="mt-5"
+              onClick={() => {
+                navigate("/admin/rekap-surat-masuk");
+              }}
+            />
+          </div>
         </div>
 
         {loading ? (
@@ -83,14 +85,6 @@ const DetailSuratKeluar = () => {
             <div className="mb-4">
               <h3 className="font-semibold">No. Paket</h3>
               <p>{surat.noPaket ?? "null"}</p>
-            </div>
-            <div className="mt-6">
-              <button
-                onClick={() => navigate("/admin/rekap-surat-keluar")}
-                className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md text-sm"
-              >
-                Kembali ke Rekap
-              </button>
             </div>
           </div>
         ) : (

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "../Navigasi";
+import Logout from "../../Logout";
 
 const Detailsuratmasuk = () => {
   const navigate = useNavigate();
@@ -38,13 +39,7 @@ const Detailsuratmasuk = () => {
       <main className="flex-1 p-8">
         <div className="flex flex-col items-start justify-between mb-6">
           <div className="flex items-center gap-4 ml-auto">
-            <span className="text-sm font-medium">Admin TU</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
+            <Logout />
           </div>
           <div className="flex flex-row justify-between items-center w-full">
             <h2 className="text-2xl font-bold mt-4">Surat Masuk</h2>
