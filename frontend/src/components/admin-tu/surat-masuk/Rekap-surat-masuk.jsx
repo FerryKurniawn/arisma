@@ -73,10 +73,12 @@ const RekapSuratMasuk = () => {
   return (
     <div className="flex min-h-screen bg-white">
       {/* Sidebar */}
-      <Navigasi />
+      <div className="w-[320px] flex-shrink-0">
+        <Navigasi />
+      </div>
 
       {/* Main Content */}
-      <main className="flex-1 bg-[#d9d9d9] min-h-screen relative">
+      <main className="flex-1 bg-gray-100 min-h-screen relative">
         {/* Sticky top bar with Logout */}
         <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-20">
           <Logout />
@@ -112,58 +114,18 @@ const RekapSuratMasuk = () => {
           </div>
 
           {/* Table Surat Masuk */}
-          <div className="bg-white shadow-md rounded-md overflow-x-auto">
-            <table className="min-w-full text-sm table-fixed">
-              <thead className="bg-gray-100">
+          <div className="w-full overflow-x-auto bg-white shadow-md rounded-md">
+            <table className="min-w-full text-sm table-auto">
+              <thead className="bg-white">
                 <tr>
-                  <th
-                    className="p-3 text-center font-semibold"
-                    style={{ width: "150px" }}
-                  >
-                    No. Surat
-                  </th>
-                  <th
-                    className="p-3 text-center font-semibold"
-                    style={{ width: "200px" }}
-                  >
-                    Perihal
-                  </th>
-                  <th
-                    className="p-3 text-center font-semibold"
-                    style={{ width: "200px" }}
-                  >
-                    Alamat Pengirim
-                  </th>
-                  <th
-                    className="p-10 text-center font-semibold"
-                    style={{ width: "200px" }}
-                  >
-                    Tanggal Terima
-                  </th>
-                  <th
-                    className="p-3 text-center font-semibold"
-                    style={{ width: "150px" }}
-                  >
-                    Sifat Surat
-                  </th>
-                  <th
-                    className="p-3 text-center font-semibold"
-                    style={{ width: "150px" }}
-                  >
-                    Disposisi
-                  </th>
-                  <th
-                    className="p-3 text-center font-semibold"
-                    style={{ width: "200px" }}
-                  >
-                    Isi Disposisi
-                  </th>
-                  <th
-                    className="p-3 text-center font-semibold"
-                    style={{ width: "200px" }}
-                  >
-                    Aksi
-                  </th>
+                  <th className="p-3 text-left font-semibold">No. Surat</th>
+                  <th className="p-3 text-left font-semibold">Perihal</th>
+                  <th className="p-3 text-left font-semibold">Alamat Pengirim</th>
+                  <th className="p-3 text-left font-semibold">Tanggal Terima</th>
+                  <th className="p-3 text-left font-semibold">Sifat Surat</th>
+                  <th className="p-3 text-left font-semibold">Disposisi</th>
+                  <th className="p-3 text-left font-semibold">Isi Disposisi</th>
+                  <th className="p-3 text-center font-semibold">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -178,54 +140,43 @@ const RekapSuratMasuk = () => {
                     <tr
                       key={surat.id}
                       className="border-t"
-                      style={
-                        index % 2 === 0
-                          ? { backgroundColor: "rgba(217, 217, 217, 0.5)" }
-                          : {}
-                      }
+                      style={{
+                        backgroundColor:
+                          index % 2 === 0 ? "rgba(217,217,217,0.5)" : "white",
+                      }}
                     >
-                      <td className="p-3 text-center">{surat.noSurat}</td>
-                      <td className="p-3 text-center">{surat.perihal}</td>
-                      <td className="p-3 text-center">
+                      <td className="p-3">{surat.noSurat}</td>
+                      <td className="p-3">{surat.perihal}</td>
+                      <td className="p-3 max-w-[200px] truncate">
                         {surat.alamatPengirim}
                       </td>
-                      <td className="p-3 text-center">{surat.tanggalTerima}</td>
-                      <td className="p-3 text-center">
+                      <td className="p-3">{surat.tanggalTerima}</td>
+                      <td className="p-3">
                         {surat.sifatSurat === "SangatSegera"
                           ? "Sangat Segera"
                           : surat.sifatSurat}
                       </td>
-                      <td className="p-3 text-center">
-                        {surat.disposisi || "-"}
-                      </td>
-                      <td className="p-3 text-center">
+                      <td className="p-3">{surat.disposisi || "-"}</td>
+                      <td className="p-3 max-w-[200px] truncate">
                         {surat.isiDisposisi || "-"}
                       </td>
-                      <td
-                        className="p-3 flex justify-center items-center gap-3 mt-3"
-                        style={{ minWidth: "200px" }}
-                      >
+                      <td className="p-3 flex justify-center gap-3">
                         <button
                           onClick={() =>
                             navigate(`/admin/detail-surat-masuk/${surat.id}`)
                           }
                         >
-                          <img
-                            src="/eye.png"
-                            width="20"
-                            className="mt-1"
-                            alt="View"
-                          />
+                          <img src="/eye.png" width="20" alt="View" />
                         </button>
                         <button
                           onClick={() =>
                             navigate(`/admin/edit-surat-masuk/${surat.id}`)
                           }
                         >
-                          <img src="/pencil.png" width="15" alt="Edit" />
+                          <img src="/pencil.png" width="18" alt="Edit" />
                         </button>
                         <button onClick={() => openDeleteModal(surat.id)}>
-                          <img src="/trash-can.png" width="15" alt="Delete" />
+                          <img src="/trash-can.png" width="18" alt="Delete" />
                         </button>
                       </td>
                     </tr>

@@ -103,7 +103,9 @@ const EditSuratMasuk = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Navigasi />
+      <div className="w-[320px] flex-shrink-0">
+        <Navigasi />
+      </div>
 
       <div className="flex-1 flex flex-col">
         <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-30">

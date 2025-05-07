@@ -33,7 +33,9 @@ const DetailSuratKeluar = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Navigasi />
+      <div className="w-[320px] flex-shrink-0">
+        <Navigasi />
+      </div>
 
       <div className="flex-1 flex flex-col">
         {/* Sticky Logout Bar */}
