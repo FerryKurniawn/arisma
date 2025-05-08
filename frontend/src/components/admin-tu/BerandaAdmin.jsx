@@ -23,44 +23,51 @@ const BerandaAdmin = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-white">
-      <div className="w-[320px] flex-shrink-0">
+    <div className="flex min-h-screen bg-gray-50 text-sm">
+      {/* Sidebar */}
+      <aside className="w-[320px] bg-white border-r border-gray-200 shadow-sm">
         <Navigasi />
-      </div>
+      </aside>
 
-      <main className="flex-1 bg-gray-100 min-h-screen relative">
-        <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-20">
+      {/* Main Content */}
+      <main className="flex-1 min-h-screen flex flex-col">
+        {/* Header */}
+        <header className="bg-white shadow px-4 py-2 sticky top-0 z-20 flex justify-end">
           <Logout />
-        </div>
+        </header>
 
-        <div className="p-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Dashboard</h2>
+        {/* Dashboard Content */}
+        <section className="flex-1 px-6 py-4">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Dashboard</h2>
+
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+            <div className="bg-white rounded-lg shadow p-4 text-center">
+              <h3 className="text-gray-600 mb-1">Jumlah Surat Masuk</h3>
+              <p className="text-3xl font-bold text-black">{dashboardData.totalMasuk}</p>
+            </div>
+            <div className="bg-white rounded-lg shadow p-4 text-center">
+              <h3 className="text-gray-600 mb-1">Jumlah Surat Keluar</h3>
+              <p className="text-3xl font-bold text-black">{dashboardData.totalKeluar}</p>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            <div className="bg-white rounded-xl shadow text-center py-6">
-              <h3 className="font-semibold">Jumlah Surat Masuk</h3>
-              <p className="text-4xl font-bold">{dashboardData.totalMasuk}</p>
+          {/* Table */}
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="px-4 py-2 border-b">
+              <h3 className="text-base font-medium text-gray-700">Rekap Surat per Tahun</h3>
             </div>
-            <div className="bg-white rounded-xl shadow text-center py-6">
-              <h3 className="font-semibold">Jumlah Surat Keluar</h3>
-              <p className="text-4xl font-bold">{dashboardData.totalKeluar}</p>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-4">
-            <table className="w-full table-auto border-collapse">
-              <thead>
-                <tr className="bg-green-900 text-white">
+            <table className="w-full table-auto text-sm">
+              <thead className="bg-[#34542C] text-white">
+                <tr>
                   <th className="px-4 py-2 text-left">Tahun</th>
                   <th className="px-4 py-2 text-left">Surat Masuk</th>
                   <th className="px-4 py-2 text-left">Surat Keluar</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-gray-700">
                 {dashboardData.rekap.map((item) => (
-                  <tr key={item.tahun} className="border-b">
+                  <tr key={item.tahun} className="hover:bg-gray-100 border-b">
                     <td className="px-4 py-2">{item.tahun}</td>
                     <td className="px-4 py-2">{item.masuk}</td>
                     <td className="px-4 py-2">{item.keluar}</td>
@@ -69,7 +76,7 @@ const BerandaAdmin = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </section>
       </main>
     </div>
   );
