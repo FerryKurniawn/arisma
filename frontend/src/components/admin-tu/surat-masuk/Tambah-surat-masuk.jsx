@@ -29,7 +29,7 @@ const TambahSuratMasuk = () => {
     formData.append("noSurat", noSurat);
     formData.append("perihal", perihal);
     formData.append("alamatPengirim", alamatPengirim);
-    formData.append("tanggalTerima", format(tanggalTerima, "dd-MM-yyyy"));
+    formData.append("tanggalTerima", format(tanggalTerima, "yyyy-MM-dd")); // Mengubah ke format YYYY-MM-DD
     formData.append("sifatSurat", sifatSurat);
     formData.append("fileUrl", file);
 
@@ -50,13 +50,11 @@ const TambahSuratMasuk = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100
-    ">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <div className="w-[320px] flex-shrink-0">
         <Navigasi />
       </div>
-      
 
       <main className="flex-1 p-8">
         <div className="flex flex-col items-start justify-between mb-6">

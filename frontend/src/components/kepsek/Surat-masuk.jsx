@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 const SuratMasuk = () => {
   const [suratMasuk, setSuratMasuk] = useState([]);
+  const [filteredSurat, setFilteredSurat] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -13,6 +15,7 @@ const SuratMasuk = () => {
         const response = await fetch("http://localhost:2000/api/surat-masuk");
         const data = await response.json();
         setSuratMasuk(data);
+        setFilteredSurat(data);
       } catch (error) {
         console.error("Error fetching surat masuk:", error);
       } finally {
@@ -23,103 +26,124 @@ const SuratMasuk = () => {
     fetchSuratMasuk();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleSearch = () => {
+    const search = searchTerm.toLowerCase();
+    const filtered = suratMasuk.filter((surat) =>
+      [surat.noSurat, surat.perihal, surat.alamatPengirim, surat.tanggalTerima, surat.sifatSurat, surat.disposisi, surat.isiDisposisi]
+        .filter(Boolean)
+        .some((field) => field.toLowerCase().includes(search))
+    );
+    setFilteredSurat(filtered);
+  };
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    navigate("/login");
+  const formatTanggal = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
   };
 
   const handleView = (id) => {
     navigate(`/kepsek/detail-surat-masuk/${id}`);
   };
 
-  const formatTanggal = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  };
-
-  const formatField = (field) => {
-    return !field || field === "null" ? "-" : field;
-  };
-
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Navigasi />
+    <div className="flex min-h-screen bg-white">
+      {/* Sidebar */}
+      <div className="w-[320px] flex-shrink-0">
+        <Navigasi />
+      </div>
 
-      <main className="flex-1 p-8">
-        <div className="flex flex-col mb-6">
-          <div className="flex items-center gap-4 ml-auto mb-5">
-            <span className="text-sm font-medium">Kepala Sekolah</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          </div>
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold"> Surat Masuk</h2>
+      {/* Main Content */}
+      <main className="flex-1 bg-gray-100 min-h-screen relative">
+        {/* Sticky top bar */}
+        <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-20">
+          <span className="text-sm font-medium mr-4">Kepala Sekolah</span>
+          <button
+            className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
+            onClick={() => navigate("/login")}
+          >
+            Logout
+          </button>
+        </div>
+
+        <div className="p-8">
+          {/* Header and Search */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Rekap Surat Masuk</h2>
             <div className="flex items-center gap-2">
-              <div className="relative flex-1 max-w-md">
+              <div className="relative flex-1 max-w-md bg-white rounded-md">
                 <input
                   type="text"
                   placeholder="Cari"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSearch();
+                  }}
                   className="w-full border rounded-md py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-gray-300"
                 />
                 <div className="absolute right-3 top-2.5 text-gray-400">
                   <img src="/search.png" width="15px" />
                 </div>
               </div>
-              <button className="bg-gray-300 hover:bg-gray-400 px-6 py-2 text-sm rounded-md">
+              <button
+                className="bg-gray-300 hover:bg-gray-400 px-6 py-2 text-sm rounded-md"
+                onClick={handleSearch}
+              >
                 Cari
               </button>
             </div>
           </div>
-        </div>
 
-        <div className="bg-white shadow-md rounded-md overflow-x-auto">
-          <table className="min-w-full text-sm table-fixed">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="p-3 text-left font-semibold">No. Surat</th>
-                <th className="p-3 text-left font-semibold">Perihal</th>
-                <th className="p-3 text-left font-semibold">Alamat Pengirim</th>
-                <th className="p-3 text-left font-semibold">Tanggal Terima</th>
-                <th className="p-3 text-left font-semibold">Sifat Surat</th>
-                <th className="p-3 text-left font-semibold">Disposisikan Ke</th>
-                <th className="p-3 text-left font-semibold">Isi Disposisi</th>
-                <th className="p-3 text-center font-semibold">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {suratMasuk.map((surat, index) => (
-                <tr key={index} className="border-t">
-                  <td className="p-3">{surat.noSurat}</td>
-                  <td className="p-3">{surat.perihal}</td>
-                  <td className="p-3">{surat.alamatPengirim}</td>
-                  <td className="p-3">{formatTanggal(surat.tanggalTerima)}</td>
-                  <td className="p-3">{surat.sifatSurat}</td>
-                  <td className="p-3">{formatField(surat.disposisi)}</td>
-                  <td className="p-3">{formatField(surat.isiDisposisi)}</td>
-                  <td className="p-3 flex justify-center items-center gap-3 mt-3">
-                    <button
-                      onClick={() => handleView(surat.id)}
-                      className="hover:cursor-pointer"
-                    >
-                      <img src="/eye.png" width="25px" alt="View" />
-                    </button>
-                  </td>
+          {/* Table */}
+          <div className="w-full overflow-x-auto bg-white shadow-md rounded-md">
+            <table className="min-w-full text-sm table-auto">
+              <thead className="bg-white">
+                <tr>
+                  <th className="p-3 text-left font-semibold">No. Surat</th>
+                  <th className="p-3 text-left font-semibold">Perihal</th>
+                  <th className="p-3 text-left font-semibold">Alamat Pengirim</th>
+                  <th className="p-3 text-left font-semibold">Tanggal Terima</th>
+                  <th className="p-3 text-left font-semibold">Sifat Surat</th>
+                  <th className="p-3 text-left font-semibold">Disposisikan Ke</th>
+                  <th className="p-3 text-left font-semibold">Isi Disposisi</th>
+                  <th className="p-3 text-center font-semibold">Aksi</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredSurat.length === 0 ? (
+                  <tr>
+                    <td colSpan="8" className="text-center py-5">
+                      Tidak ada data tersedia.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredSurat.map((surat, index) => (
+                    <tr
+                      key={surat.id}
+                      className="border-t"
+                      style={{
+                        backgroundColor:
+                          index % 2 === 0 ? "rgba(217,217,217,0.5)" : "white",
+                      }}
+                    >
+                      <td className="p-3">{surat.noSurat}</td>
+                      <td className="p-3">{surat.perihal}</td>
+                      <td className="p-3 max-w-[200px] truncate">{surat.alamatPengirim}</td>
+                      <td className="p-3">{formatTanggal(surat.tanggalTerima)}</td>
+                      <td className="p-3">{surat.sifatSurat}</td>
+                      <td className="p-3">{surat.disposisi || "-"}</td>
+                      <td className="p-3 max-w-[200px] truncate">{surat.isiDisposisi || "-"}</td>
+                      <td className="p-3 flex justify-center gap-3">
+                        <button onClick={() => handleView(surat.id)}>
+                          <img src="/eye.png" width="20" alt="View" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </main>
     </div>

@@ -27,7 +27,7 @@ model SuratMasuk {
   noSurat        String
   perihal        String
   alamatPengirim String
-  tanggalTerima  String
+  tanggalTerima  DateTime
   sifatSurat     SifatSurat
   fileUrl        String?
   disposisi      String?
@@ -42,7 +42,7 @@ model SuratKeluar {
   noSurat        String
   noBerkas       String
   alamatPenerima String
-  tanggalKeluar  String
+  tanggalKeluar  DateTime
   perihal        String
   noPetunjuk     String
   noPaket        String

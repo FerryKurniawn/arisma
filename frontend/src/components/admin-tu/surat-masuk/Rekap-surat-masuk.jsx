@@ -199,7 +199,6 @@ const RekapSuratMasuk = () => {
 
         {/* Delete Modal */}
         {showDeleteModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
             <Delete
               onDelete={() => handleDelete(selectedId)}
               onCancel={() => {
@@ -207,7 +206,6 @@ const RekapSuratMasuk = () => {
                 setSelectedId(null);
               }}
             />
-          </div>
         )}
       </main>
     </div>

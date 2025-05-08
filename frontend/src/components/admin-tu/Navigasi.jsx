@@ -7,6 +7,16 @@ function NavigasiAdmin() {
 
   const menuItems = [
     {
+      label: "Beranda",
+      path: "/admin/beranda-admin",
+      additionalPaths: [
+        "/admin/tambah-surat-masuk",
+        "/admin/edit-surat-masuk",
+        "/admin/detail-surat-masuk"
+      ],
+      icon: "/beranda.png"
+    },
+    {
       label: "Surat Masuk",
       path: "/admin/rekap-surat-masuk",
       additionalPaths: [

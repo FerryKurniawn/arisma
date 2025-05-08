@@ -3,7 +3,7 @@ import Navigasi from "../Navigasi";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import Logout from "../../Logout";
-import SuccessAlert from "../SuccessAlert"; // ✅ Import SuccessAlert
+import SuccessAlert from "../SuccessAlert";
 
 const TambahSuratKeluar = () => {
   const navigate = useNavigate();
@@ -15,21 +15,21 @@ const TambahSuratKeluar = () => {
   const [perihal, setPerihal] = useState("");
   const [noPetunjuk, setNoPetunjuk] = useState("");
   const [noPaket, setNoPaket] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false); // ✅ Tambahkan state
+  const [showSuccess, setShowSuccess] = useState(false); //
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const payload = {
       noSurat,
       noBerkas,
       alamatPenerima,
-      tanggalKeluar,
+      tanggalKeluar: new Date(tanggalKeluar).toISOString(), // Mengubah tanggal menjadi format ISO
       perihal,
       noPetunjuk,
       noPaket,
     };
-
+  
     try {
       const response = await fetch("http://localhost:2000/api/surat-keluar", {
         method: "POST",
@@ -38,9 +38,9 @@ const TambahSuratKeluar = () => {
         },
         body: JSON.stringify(payload),
       });
-
+  
       if (response.ok) {
-        setShowSuccess(true); // ✅ Tampilkan alert sukses
+        setShowSuccess(true);
       } else {
         alert("Terjadi kesalahan saat menambahkan Surat Keluar.");
       }
@@ -49,6 +49,7 @@ const TambahSuratKeluar = () => {
       alert("Terjadi kesalahan saat menghubungi server.");
     }
   };
+  
 
   return (
     <div className="flex min-h-screen bg-gray-100">
