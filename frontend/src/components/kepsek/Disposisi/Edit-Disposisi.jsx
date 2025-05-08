@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Navigasi from "../Navigasi";
+import Navigasi from "../Kepsekvigasi";
 import InputForm from "../../InputForm";
 import Logout from "../../Logout";
-import UpdateAlert from "../UpdateAlert";
+import UpdateAlert from "../../admin-tu/UpdateAlert";
 
 const EditSuratMasuk = () => {
   const navigate = useNavigate();
@@ -96,7 +96,7 @@ const EditSuratMasuk = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-100">
       <div className="w-[320px] flex-shrink-0">
         <Navigasi />
       </div>

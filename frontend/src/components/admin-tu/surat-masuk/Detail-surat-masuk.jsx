@@ -28,8 +28,35 @@ const Detailsuratmasuk = () => {
     fetchSurat();
   }, [id]);
 
+  const FormDisposisi = ({ suratId }) => {
+    const [disposisi, setDisposisi] = useState("");
+    const [isiDisposisi, setIsiDisposisi] = useState("");
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      const response = await fetch(`http://localhost:2000/api/surat-masuk/disposisi/${suratId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          disposisi,
+          isiDisposisi,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert("Disposisi berhasil dikirim");
+      } else {
+        alert("Gagal mengirim disposisi: " + data.message);
+      }
+    };
+    
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-50">
       <div className="w-[320px] flex-shrink-0">
         <Navigasi />
       </div>
@@ -102,6 +129,6 @@ const Detailsuratmasuk = () => {
       </div>
     </div>
   );
-};
+};}
 
 export default Detailsuratmasuk;

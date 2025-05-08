@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "./Kepsekvigasi";
+import Logout from "../Logout";
 
 const DetailSuratMasuk = () => {
   const navigate = useNavigate();
@@ -12,22 +13,18 @@ const DetailSuratMasuk = () => {
     alamatPengirim: "",
     tanggalTerima: "",
     sifatSurat: "",
-    disposisi: "",
     isiDisposisi: "",
     fileUrl: "",
     disposisikanKe: "",
+    tenggatWaktu: "",
   });
 
   useEffect(() => {
     const fetchSurat = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:2000/api/surat-masuk/${id}`
-        );
+        const response = await fetch(`http://localhost:2000/api/surat-masuk/${id}`);
         if (!response.ok) throw new Error("Gagal mengambil data surat masuk");
         const data = await response.json();
-
-        console.log("Fetched data:", data); // Log the raw data here
 
         setSurat({
           noSurat: data.noSurat,
@@ -35,13 +32,10 @@ const DetailSuratMasuk = () => {
           alamatPengirim: data.alamatPengirim,
           tanggalTerima: data.tanggalTerima.slice(0, 10),
           sifatSurat: data.sifatSurat,
-          disposisi:
-            !data.disposisi || data.disposisi === "null" ? "-" : data.disposisi, // Check for null, undefined, or "null"
-          isiDisposisi:
-            !data.isiDisposisi || data.isiDisposisi === "null"
-              ? "-"
-              : data.isiDisposisi,
+          isiDisposisi: data.isiDisposisi && data.isiDisposisi !== "null" ? data.isiDisposisi : "",
           fileUrl: data.fileUrl,
+          disposisikanKe: "",
+          tenggatWaktu: "",
         });
       } catch (error) {
         console.error("Error fetching surat masuk:", error);
@@ -51,109 +45,112 @@ const DetailSuratMasuk = () => {
     fetchSurat();
   }, [id]);
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    navigate("/login");
-  };
-
-  const handleDisposisikanChange = (e) => {
-    setSurat({ ...surat, disposisikanKe: e.target.value });
+  const handleChange = (e) => {
+    setSurat({ ...surat, [e.target.name]: e.target.value });
   };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Navigasi />
+      <div className="w-[320px] flex-shrink-0">
+        <Navigasi />
+      </div>
 
-      <main className="flex-1 p-8">
-        <div className="flex flex-col items-start justify-between mb-6">
-          <div className="flex items-center gap-4 ml-auto">
-            <span className="text-sm font-medium">Kepala Sekolah</span>
-            <button
-              className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          </div>
-
-          <h2 className="text-2xl font-bold mt-4">Detail Surat Masuk</h2>
+      <div className="flex-1 flex flex-col">
+        <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-30">
+          <Logout />
         </div>
 
-        <div className="flex flex-col gap-4 max-w-full bg-white p-6 rounded shadow">
-          <div className="flex gap-4">
-            <p className="font-semibold w-1/3">No. Surat:</p>
-            <p className="w-2/3">{surat.noSurat}</p>
+        <main className="flex-1 p-8">
+          <div className="flex justify-between items-center mt-6 mb-6">
+            <h2 className="text-2xl font-bold">Detail Surat Masuk</h2>
+            <img
+              src="/back.png"
+              alt="back"
+              width="20px"
+              className="cursor-pointer"
+              onClick={() => navigate("/kepsek/surat-masuk")}
+            />
           </div>
 
-          <div className="flex gap-4">
-            <p className="font-semibold w-1/3">Perihal:</p>
-            <p className="w-2/3">{surat.perihal}</p>
-          </div>
-
-          <div className="flex gap-4">
-            <p className="font-semibold w-1/3">Alamat Pengirim:</p>
-            <p className="w-2/3">{surat.alamatPengirim}</p>
-          </div>
-
-          <div className="flex gap-4">
-            <p className="font-semibold w-1/3">Tanggal Terima:</p>
-            <p className="w-2/3">{surat.tanggalTerima}</p>
-          </div>
-
-          <div className="flex gap-4">
-            <p className="font-semibold w-1/3">Sifat Surat:</p>
-            <p className="w-2/3">{surat.sifatSurat}</p>
-          </div>
-
-          <div className="flex gap-4">
-            <p className="font-semibold w-1/3">File Lampiran:</p>
-            {surat.fileUrl ? (
-              <a
-                href={`http://localhost:2000${surat.fileUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline w-2/3"
-              >
-                Lihat File
-              </a>
-            ) : (
-              <p className="text-gray-500 italic w-2/3">
-                Tidak ada file terlampir
-              </p>
+          <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-3xl">
+            <div className="mb-4 grid grid-cols-3 gap-4">
+              <h3 className="font-semibold">No. Surat</h3>
+              <p className="col-span-2">{surat.noSurat}</p>
+            </div>
+            <div className="mb-4 grid grid-cols-3 gap-4">
+              <h3 className="font-semibold">Perihal</h3>
+              <p className="col-span-2">{surat.perihal}</p>
+            </div>
+            <div className="mb-4 grid grid-cols-3 gap-4">
+              <h3 className="font-semibold">Alamat Pengirim</h3>
+              <p className="col-span-2">{surat.alamatPengirim}</p>
+            </div>
+            <div className="mb-4 grid grid-cols-3 gap-4">
+              <h3 className="font-semibold">Tanggal Terima</h3>
+              <p className="col-span-2">{surat.tanggalTerima}</p>
+            </div>
+            <div className="mb-4 grid grid-cols-3 gap-4">
+              <h3 className="font-semibold">Sifat Surat</h3>
+              <p className="col-span-2">{surat.sifatSurat}</p>
+            </div>
+            {surat.fileUrl && (
+              <div className="mb-4 grid grid-cols-3 gap-4">
+                <h3 className="font-semibold">File Lampiran</h3>
+                <a
+                  href={`http://localhost:2000${surat.fileUrl}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="col-span-2 text-blue-500 underline"
+                >
+                  Lihat File
+                </a>
+              </div>
             )}
           </div>
-        </div>
 
-        <div>
-          <div className="p-5">
-            <h1 className="font-bold text-xl">Form Disposisi</h1>
-          </div>
-          <div className="flex flex-col gap-4 max-w-full bg-white p-6 rounded shadow">
-            <div className="flex gap-4">
-              <p className="font-semibold w-1/3">Disposisikan ke:</p>
+            <h2 className="text-2xl font-bold mb-4 mt-4">Form Disposisi</h2>
+          <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-3xl mt-6">
+
+            <div className="mb-4 grid grid-cols-3 gap-4 items-center">
+              <h3 className="font-semibold">Disposisikan ke</h3>
               <select
-                className="w-2/3 p-2 border rounded"
+                name="disposisikanKe"
+                className="col-span-2 p-2 border rounded"
                 value={surat.disposisikanKe}
-                onChange={handleDisposisikanChange}
+                onChange={handleChange}
               >
-                <option value="">Pilih</option> {/* Default "Pilih" option */}
+                <option value="">Pilih</option>
                 <option value="admin-tu-1">Admin TU 1</option>
                 <option value="admin-tu-2">Admin TU 2</option>
               </select>
             </div>
 
-            <div className="flex gap-4">
-              <p className="font-semibold w-1/3">Disposisi:</p>
-              <p className="w-2/3">{surat.disposisi}</p>
+            <div className="mb-4 grid grid-cols-3 gap-4 items-start">
+              <h3 className="font-semibold">Isi Disposisi</h3>
+              <input
+                type="text"
+                name="isiDisposisi"
+                className="col-span-2 p-2 border rounded"
+                value={surat.isiDisposisi}
+                onChange={handleChange}
+                placeholder="Tulis isi disposisi..."
+              />
             </div>
 
-            <div className="flex gap-4">
-              <p className="font-semibold w-1/3">Isi Disposisi:</p>
-              <p className="w-2/3">{surat.isiDisposisi}</p>
+            <div className="mb-4 grid grid-cols-3 gap-4 items-center">
+              <h3 className="font-semibold">Tenggat Waktu</h3>
+              <input
+                type="date"
+                name="tenggatWaktu"
+                className="col-span-2 p-2 border rounded"
+                value={surat.tenggatWaktu}
+                onChange={handleChange}
+              />
             </div>
+            <button className="bg-[#34542C] py-3 px-8 text-white">Kirim</button>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };

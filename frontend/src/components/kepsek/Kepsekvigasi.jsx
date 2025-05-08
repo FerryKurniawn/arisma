@@ -7,10 +7,15 @@ function Navigasi() {
 
   const menuItems = [
     {
+      label: "Beranda",
+      path: "/kepsek/beranda-kepsek",
+      icon: "/beranda.png"
+    },
+    {
       label: "Surat Masuk",
-      path: "/kepsek/Surat-masuk",
+      path: "/kepsek/surat-masuk",
       additionalPaths: [
-        "/kepsek/Detail-surat-masuk",
+        "/kepsek/detail-surat-masuk"
       ],
       icon: "/surat_masuk.png"
     },

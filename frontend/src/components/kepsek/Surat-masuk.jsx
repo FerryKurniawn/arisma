@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navigasi from "./Kepsekvigasi";
 import { useNavigate } from "react-router-dom";
+import Logout from "../Logout";
 
 const SuratMasuk = () => {
   const [suratMasuk, setSuratMasuk] = useState([]);
@@ -53,16 +54,10 @@ const SuratMasuk = () => {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 bg-gray-100 min-h-screen relative">
-        {/* Sticky top bar */}
+      <main className="flex-1 bg-gray-50 min-h-screen relative">
+        {/* Sticky top bar with Logout */}
         <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-20">
-          <span className="text-sm font-medium mr-4">Kepala Sekolah</span>
-          <button
-            className="border px-3 py-1 rounded text-sm hover:bg-gray-200 transition"
-            onClick={() => navigate("/login")}
-          >
-            Logout
-          </button>
+          <Logout />
         </div>
 
         <div className="p-8">

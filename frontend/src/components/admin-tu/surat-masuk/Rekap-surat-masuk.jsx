@@ -78,7 +78,7 @@ const RekapSuratMasuk = () => {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 bg-gray-100 min-h-screen relative">
+      <main className="flex-1 bg-gray-50 min-h-screen relative">
         {/* Sticky top bar with Logout */}
         <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-20">
           <Logout />
