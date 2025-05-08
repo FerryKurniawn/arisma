@@ -16,6 +16,10 @@ import Detailsuratmasukkepsek from "./components/kepsek/Detail-surat-masuk";
 
 import Success from "./components/admin-tu/SuccessAlert";
 import ProtectedRoute from "./components/ProtectedRoute";
+import DaftarDisposisi from "./components/kepsek/Disposisi/Daftar-Disposisi";
+import DetailDisposisi from "./components/kepsek/Disposisi/Detail-Disposisi";
+import Editsuratmasukkepsek from "./components/kepsek/Disposisi/Edit-disposisi";
+import EditDisposisi from "./components/kepsek/Disposisi/Edit-disposisi";
 
 function App() {
   return (
@@ -107,6 +111,31 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/kepsek/Disposisi/Daftar-Disposisi"
+            element={
+              <ProtectedRoute allowedRoles={["KEPSEK"]}>
+                <DaftarDisposisi />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/kepsek/Disposisi/Detail-Disposisi/:id"
+            element={
+              <ProtectedRoute allowedRoles={["KEPSEK"]}>
+                <DetailDisposisi />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/kepsek/Disposisi/Edit-Disposisi/:id"
+            element={
+              <ProtectedRoute allowedRoles={["KEPSEK"]}>
+                <EditDisposisi />
+              </ProtectedRoute>
+            }
+          />
+
         </Routes>
       </BrowserRouter>
     </>
