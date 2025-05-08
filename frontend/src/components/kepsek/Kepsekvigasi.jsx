@@ -7,20 +7,20 @@ function Navigasi() {
 
   const menuItems = [
     {
-      label: "Beranda",
-      path: "/kepsek/beranda-kepsek",
-      icon: "/beranda.png"
-    },
-    {
       label: "Surat Masuk",
-      path: "/kepsek/rekap-surat-masuk",
-      additionalPaths: ["/kepsek/tambah-surat-masuk", "/kepsek/detail-surat-masuk"],
+      path: "/kepsek/Surat-masuk",
+      additionalPaths: [
+        "/kepsek/Detail-surat-masuk",
+      ],
       icon: "/surat_masuk.png"
     },
     {
-      label: "Daftar Disposisi",
-      path: "/kepsek/rekap-surat-keluar",
-      additionalPaths: [],
+      label: "Disposisi",
+      path: "/kepsek/Daftar-Disposisi",
+      additionalPaths: [
+        "/kepsek/Detail-Disposisi",
+        "/kepsek/Edit-Disposisi",
+      ],
       icon: "/google-docs.png"
     }
   ];
