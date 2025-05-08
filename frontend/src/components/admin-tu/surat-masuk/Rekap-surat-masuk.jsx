@@ -120,8 +120,12 @@ const RekapSuratMasuk = () => {
                 <tr>
                   <th className="p-3 text-left font-semibold">No. Surat</th>
                   <th className="p-3 text-left font-semibold">Perihal</th>
-                  <th className="p-3 text-left font-semibold">Alamat Pengirim</th>
-                  <th className="p-3 text-left font-semibold">Tanggal Terima</th>
+                  <th className="p-3 text-left font-semibold">
+                    Alamat Pengirim
+                  </th>
+                  <th className="p-3 text-left font-semibold">
+                    Tanggal Terima
+                  </th>
                   <th className="p-3 text-left font-semibold">Sifat Surat</th>
                   <th className="p-3 text-left font-semibold">Disposisi</th>
                   <th className="p-3 text-left font-semibold">Isi Disposisi</th>
@@ -150,7 +154,17 @@ const RekapSuratMasuk = () => {
                       <td className="p-3 max-w-[200px] truncate">
                         {surat.alamatPengirim}
                       </td>
-                      <td className="p-3">{surat.tanggalTerima}</td>
+                      <td className="p-3">
+                        {new Date(surat.tanggalTerima).toLocaleDateString(
+                          "id-ID",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )}
+                      </td>
+
                       <td className="p-3">
                         {surat.sifatSurat === "SangatSegera"
                           ? "Sangat Segera"
@@ -199,13 +213,13 @@ const RekapSuratMasuk = () => {
 
         {/* Delete Modal */}
         {showDeleteModal && (
-            <Delete
-              onDelete={() => handleDelete(selectedId)}
-              onCancel={() => {
-                setShowDeleteModal(false);
-                setSelectedId(null);
-              }}
-            />
+          <Delete
+            onDelete={() => handleDelete(selectedId)}
+            onCancel={() => {
+              setShowDeleteModal(false);
+              setSelectedId(null);
+            }}
+          />
         )}
       </main>
     </div>

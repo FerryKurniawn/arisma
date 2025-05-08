@@ -4,7 +4,6 @@ import Navigasi from "../Navigasi";
 import Logout from "../../Logout";
 import Delete from "../Delete";
 import { useNavigate } from "react-router-dom";
-
 const RekapSuratKeluar = () => {
   const navigate = useNavigate();
   const [dataSurat, setDataSurat] = useState([]);
@@ -115,8 +114,12 @@ const RekapSuratKeluar = () => {
                 <tr>
                   <th className="p-3 text-left font-semibold">No. Surat</th>
                   <th className="p-3 text-left font-semibold">No. Berkas</th>
-                  <th className="p-3 text-left font-semibold">Alamat Penerima</th>
-                  <th className="p-3 text-left font-semibold">Tanggal Keluar</th>
+                  <th className="p-3 text-left font-semibold">
+                    Alamat Penerima
+                  </th>
+                  <th className="p-3 text-left font-semibold">
+                    Tanggal Keluar
+                  </th>
                   <th className="p-3 text-left font-semibold">Perihal</th>
                   <th className="p-3 text-left font-semibold">No. Petunjuk</th>
                   <th className="p-3 text-left font-semibold">No. Paket</th>
@@ -145,7 +148,17 @@ const RekapSuratKeluar = () => {
                       <td className="p-3 max-w-[200px] truncate">
                         {surat.alamatPenerima}
                       </td>
-                      <td className="p-3">{surat.tanggalKeluar}</td>
+                      <td className="p-3">
+                        {new Date(surat.tanggalKeluar).toLocaleDateString(
+                          "id-ID",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )}
+                      </td>
+
                       <td className="p-3">{surat.perihal}</td>
                       <td className="p-3">{surat.noPetunjuk}</td>
                       <td className="p-3">{surat.noPaket}</td>
@@ -186,13 +199,13 @@ const RekapSuratKeluar = () => {
         </div>
 
         {showDeleteModal && (
-            <Delete
-              onDelete={() => handleDelete(selectedId)}
-              onCancel={() => {
-                setShowDeleteModal(false);
-                setSelectedId(null);
-              }}
-            />
+          <Delete
+            onDelete={() => handleDelete(selectedId)}
+            onCancel={() => {
+              setShowDeleteModal(false);
+              setSelectedId(null);
+            }}
+          />
         )}
       </main>
     </div>
