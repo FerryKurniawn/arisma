@@ -1,10 +1,12 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Login from "./components/Login";
+// surat masuk admin tu
 import Rekapsuratmasukadmin from "./components/admin-tu/surat-masuk/Rekap-surat-masuk";
 import Tambahsuratmasukadmin from "./components/admin-tu/surat-masuk/Tambah-surat-masuk";
 import Editsuratmasukadmin from "./components/admin-tu/surat-masuk/Edit-surat-masuk";
 import Detailsuratmasukadmin from "./components/admin-tu/surat-masuk/Detail-surat-masuk";
+import BerandaAdmin from "./components/admin-tu/BerandaAdmin";
 // surat keluar admin tu
 import Rekapsuratkeluaradmin from "./components/admin-tu/surat-keluar/Rekap-surat-keluar";
 import Editsuratkeluaradmin from "./components/admin-tu/surat-keluar/Edit-surat-keluar";
@@ -13,6 +15,7 @@ import Tambahsuratkeluaradmin from "./components/admin-tu/surat-keluar/Tambah-su
 //kepsek
 import Suratmasukkepsek from "./components/kepsek/Surat-masuk";
 import Detailsuratmasukkepsek from "./components/kepsek/Detail-surat-masuk";
+import BerandaKepsek from "./components/kepsek/BerandaKepsek";
 
 import Success from "./components/admin-tu/SuccessAlert";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -94,7 +97,23 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/beranda-admin"
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <BerandaAdmin />
+              </ProtectedRoute>
+            }
+          />
           {/* Kepsek */}
+          <Route
+            path="/kepsek/beranda-kepsek"
+            element={
+              <ProtectedRoute allowedRoles={["KEPSEK"]}>
+                <BerandaKepsek />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/kepsek/rekap-surat-masuk"
             element={

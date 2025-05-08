@@ -1,7 +1,6 @@
-// Delete.jsx
 import React from "react";
 
-const Delete = ({ onDelete, onCancel }) => {
+const UpdateAlert = ({ onClose }) => {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
@@ -13,24 +12,18 @@ const Delete = ({ onDelete, onCancel }) => {
           style={{ backgroundColor: "#D9D9D9" }}
         >
           <div className="w-16 h-16 flex items-center justify-center rounded-full">
-            <img src="/warning.png" alt="Warning Icon" width="40px" />
+            <img src="/check.png" alt="Success Icon" width="40px" />
           </div>
         </div>
         <p className="text-lg font-semibold text-center text-gray-900">
-          Anda Yakin Ingin Menghapus?
+          Data berhasil diperbarui!
         </p>
-        <div className="w-full flex flex-col space-y-2">
+        <div className="w-full">
           <button
-            onClick={onDelete}
+            onClick={onClose}
             className="w-full py-2 bg-green-700 text-white rounded-md hover:bg-green-800"
           >
-            Ya, Hapus
-          </button>
-          <button
-            onClick={onCancel}
-            className="w-full py-2 border border-gray-400 text-black rounded-md hover:bg-gray-100"
-          >
-            Batalkan
+            Oke!
           </button>
         </div>
       </div>
@@ -38,4 +31,4 @@ const Delete = ({ onDelete, onCancel }) => {
   );
 };
 
-export default Delete;
+export default UpdateAlert;

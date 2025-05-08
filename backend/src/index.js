@@ -118,6 +118,57 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+// dashboard
+// Jumlah total dan per tahun surat masuk & keluar
+app.get("/api/dashboard", async (req, res) => {
+  try {
+    const suratMasuk = await prisma.suratMasuk.findMany();
+    const suratKeluar = await prisma.suratKeluar.findMany();
+
+    const getYear = (dateString) => {
+      const date = new Date(dateString);
+      return date.getFullYear();
+    };
+
+    const countByYear = (data, fieldName) => {
+      const counts = {};
+      for (const item of data) {
+        const year = getYear(item[fieldName]);
+        if (!counts[year]) counts[year] = { masuk: 0, keluar: 0, disposisi: 0 };
+        if (fieldName === "tanggalTerima") {
+          counts[year].masuk++;
+          if (item.disposisi) counts[year].disposisi++;
+        } else if (fieldName === "tanggalKeluar") {
+          counts[year].keluar++;
+        }
+      }
+      return counts;
+    };
+
+    const tahunMasuk = countByYear(suratMasuk, "tanggalTerima");
+    const tahunKeluar = countByYear(suratKeluar, "tanggalKeluar");
+
+    // Gabungkan
+    const allYears = new Set([...Object.keys(tahunMasuk), ...Object.keys(tahunKeluar)]);
+    const rekap = Array.from(allYears).sort((a, b) => b - a).map((tahun) => ({
+      tahun,
+      masuk: tahunMasuk[tahun]?.masuk || 0,
+      disposisi: tahunMasuk[tahun]?.disposisi || 0,
+      keluar: tahunKeluar[tahun]?.keluar || 0,
+    }));
+
+    res.json({
+      totalMasuk: suratMasuk.length,
+      totalKeluar: suratKeluar.length,
+      rekap,
+    });
+  } catch (error) {
+    console.error("Dashboard error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+
 // Surat Masuk
 app.get("/api/surat-masuk", async (req, res) => {
   try {
@@ -170,18 +221,25 @@ app.post("/api/surat-masuk", upload.single("fileUrl"), async (req, res) => {
   console.log("REQ.FILE:", req.file);
 
   try {
-    const suratMasuk = await prisma.suratMasuk.create({
-      data: {
-        noSurat,
-        perihal,
-        alamatPengirim,
-        tanggalTerima,
-        sifatSurat,
-        fileUrl: req.file ? `/uploads/${req.file.filename}` : null,
-        disposisi,
-        isiDisposisi,
-      },
-    });
+    const parsedTanggal = new Date(tanggalTerima);
+
+if (isNaN(parsedTanggal)) {
+  return res.status(400).json({ message: "Format tanggal tidak valid" });
+}
+
+const suratMasuk = await prisma.suratMasuk.create({
+  data: {
+    noSurat,
+    perihal,
+    alamatPengirim,
+    tanggalTerima: parsedTanggal,
+    sifatSurat,
+    fileUrl: req.file ? `/uploads/${req.file.filename}` : null,
+    disposisi,
+    isiDisposisi,
+  },
+});
+
     res.send("Surat masuk telah berhasil ditambahkan");
   } catch (err) {
     console.error("❌ ERROR SAAT CREATE SuratMasuk:", err); // Tambah log ini

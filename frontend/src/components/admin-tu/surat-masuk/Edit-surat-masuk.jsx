@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "../Navigasi";
 import InputForm from "../../InputForm";
 import Logout from "../../Logout";
+import UpdateAlert from "../UpdateAlert";
 
 const EditSuratMasuk = () => {
   const navigate = useNavigate();
@@ -14,15 +15,13 @@ const EditSuratMasuk = () => {
   const [alamatPengirim, setAlamatPengirim] = useState("");
   const [tanggalTerima, setTanggalTerima] = useState("");
   const [sifatSurat, setSifatSurat] = useState("");
-
-  const [originalData, setOriginalData] = useState(null); // simpan nilai asli
+  const [originalData, setOriginalData] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const fetchSurat = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:2000/api/surat-masuk/${id}`
-        );
+        const response = await fetch(`http://localhost:2000/api/surat-masuk/${id}`);
         if (!response.ok) throw new Error("Gagal mengambil data surat masuk");
         const data = await response.json();
 
@@ -32,7 +31,6 @@ const EditSuratMasuk = () => {
         setTanggalTerima(data.tanggalTerima.slice(0, 10));
         setSifatSurat(data.sifatSurat);
 
-        // simpan data asli
         setOriginalData({
           noSurat: data.noSurat,
           perihal: data.perihal,
@@ -64,11 +62,6 @@ const EditSuratMasuk = () => {
     setFile(e.target.files[0]);
   };
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    navigate("/login");
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -81,51 +74,50 @@ const EditSuratMasuk = () => {
       formData.append("sifatSurat", sifatSurat);
       if (file) formData.append("fileUrl", file);
 
-      const response = await fetch(
-        `http://localhost:2000/api/surat-masuk/${id}`,
-        {
-          method: "PUT",
-          body: formData,
-        }
-      );
+      const response = await fetch(`http://localhost:2000/api/surat-masuk/${id}`, {
+        method: "PUT",
+        body: formData,
+      });
 
       if (response.ok) {
-        alert("Surat Masuk berhasil diupdate!");
-        navigate("/admin/rekap-surat-masuk");
+        setShowSuccess(true);
       } else {
         alert("Terjadi kesalahan saat mengupdate Surat Masuk.");
       }
     } catch (error) {
-      console.error("Error updating SuratMasuk:", error);
+      console.error("Error updating Surat Masuk:", error);
       alert("Terjadi kesalahan saat menghubungi server.");
     }
   };
 
+  const handleCloseAlert = () => {
+    setShowSuccess(false);
+    navigate("/admin/rekap-surat-masuk");
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Navigasi />
+      <div className="w-[320px] flex-shrink-0">
+        <Navigasi />
+      </div>
 
-      <main className="flex-1 p-8">
-        <div className="flex flex-col items-start justify-between mb-6">
-          <div className="flex items-center gap-4 ml-auto">
-            <Logout />
-          </div>
+      <div className="flex-1 flex flex-col">
+        <div className="w-full bg-white shadow-md p-4 flex justify-end sticky top-0 z-30">
+          <Logout />
+        </div>
 
-          <div className="flex flex-row justify-between items-center w-full">
-            <h2 className="text-2xl font-bold mt-4"> Edit Surat Masuk</h2>
+        <main className="flex-1 p-8">
+          <div className="flex justify-between items-center mt-6 mb-6">
+            <h2 className="text-2xl font-bold">Edit Surat Masuk</h2>
             <img
               src="/back.png"
               alt="back"
               width="20px"
-              className="mt-5"
-              onClick={() => {
-                navigate("/admin/rekap-surat-masuk");
-              }}
+              className="cursor-pointer"
+              onClick={() => navigate("/admin/rekap-surat-masuk")}
             />
           </div>
-        </div>
 
-        <div className="flex min-h-screen">
           <form
             className="flex flex-col gap-2 w-xl max-w-full"
             onSubmit={handleSubmit}
@@ -150,13 +142,12 @@ const EditSuratMasuk = () => {
             />
             <InputForm
               label="Tanggal Terima"
-              placeholder="YYYY-MM-DD"
+              type="date"
               value={tanggalTerima}
               onChange={(e) => setTanggalTerima(e.target.value)}
             />
-
-            <div className="flex items-center gap-4 mb-4">
-              <p className="font-medium w-64">Sifat Surat</p>
+            <div className="flex flex-col gap-1">
+              <label className="font-medium text-gray-700">Sifat Surat</label>
               <select
                 className="w-full p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
                 value={sifatSurat}
@@ -168,30 +159,31 @@ const EditSuratMasuk = () => {
                 <option value="Biasa">Biasa</option>
               </select>
             </div>
-
-            <label className="w-full p-6 border rounded-md text-center bg-white text-black shadow cursor-pointer">
-              {file ? file.name : "Pilih file baru untuk upload (optional)"}
+            <div className="flex flex-col gap-1">
+              <label className="font-medium text-gray-700">Upload File Baru</label>
               <input
                 type="file"
-                className="hidden"
                 onChange={handleFileChange}
+                className="p-3 rounded-md bg-white text-black shadow"
               />
-            </label>
-
+              {file && <p className="text-sm text-gray-600 mt-1">File: {file.name}</p>}
+            </div>
             <button
               type="submit"
               disabled={!isChanged()}
               className={`mt-4 py-2 rounded-md ${
                 isChanged()
-                  ? "bg-gray-300 hover:bg-gray-400 text-black"
-                  : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  ? "bg-[#34542C] hover:bg-[#34542C] text-black"
+                  : "bg-[#34542C] opacity-70 text-gray-500 cursor-not-allowed"
               }`}
             >
-              Perbarui
+              Perbarui Surat
             </button>
           </form>
-        </div>
-      </main>
+        </main>
+      </div>
+
+      {showSuccess && <UpdateAlert onClose={handleCloseAlert} />}
     </div>
   );
 };
