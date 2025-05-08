@@ -5,70 +5,62 @@ function Navigasi() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleButtonClick = (buttonPath) => {
-    navigate(buttonPath);
-  };
+  const menuItems = [
+    {
+      label: "Surat Masuk",
+      path: "/kepsek/Surat-masuk",
+      additionalPaths: [
+        "/kepsek/Detail-surat-masuk",
+      ],
+      icon: "/surat_masuk.png"
+    },
+    {
+      label: "Disposisi",
+      path: "/kepsek/Daftar-Disposisi",
+      additionalPaths: [
+        "/kepsek/Detail-Disposisi",
+        "/kepsek/Edit-Disposisi",
+      ],
+      icon: "/google-docs.png"
+    }
+  ];
+
+  const isActive = (path, additionalPaths = []) =>
+    location.pathname === path ||
+    additionalPaths.some((p) => location.pathname.startsWith(p));
 
   return (
-    <div className="w-[400px] ml-5 flex flex-col items-center mt-[40px] shadow-md h-screen">
-      <img src="/man1.png" alt="Logo" width="225" className="mt-5" />
+    <div className="w-[320px] h-screen fixed top-0 left-0 bg-white shadow-md flex flex-col items-center py-6 z-50">
+      <img src="/man1.png" alt="Logo" width="170" className="mt-2" />
 
-      <div className="flex flex-col items-center mt-[40px] text-xl font-semibold">
+      <div className="flex flex-col items-center mt-4 text-lg font-semibold text-center px-4">
         <h1>ARISMA</h1>
         <h2>ARSIP DIGITAL</h2>
         <h2>MADRASAH ALIYAH NEGERI 1 SINTANG</h2>
       </div>
 
-      <div className="p-10 rounded-lg shadow-lg mt-[10px]">
-        <div
-          onClick={() => handleButtonClick("/kepsek/rekap-surat-masuk")}
-          className={`flex items-center gap-4 p-2 mb-[20px] w-[300px] rounded-lg cursor-pointer ${
-            location.pathname === "/kepsek/rekap-surat-masuk" ||
-            "/kepsek/tambah-surat-masuk"
-              ? "bg-[#34542C50]"
-              : ""
-          }`}
-        >
-          <img
-            src="/surat_masuk.png"
-            alt="Surat Masuk"
-            className="w-[23px] h-[23px]"
-          />
-          <span
-            className={`text-2xl font-semibold${
-              location.pathname === "/kepsek/rekap-surat-masuk" ||
-              "/kepsek/tambah-surat-masuk"
-                ? "text-black font-bold"
-                : "text-gray-600"
-            }`}
-          >
-            Surat Masuk
-          </span>
-        </div>
-
-        <div
-          onClick={() => handleButtonClick("/kepsek/rekap-surat-keluar")}
-          className={`flex items-center gap-4 mb-[20px] w-[300px] p-2 rounded-lg cursor-pointer ${
-            location.pathname === "/kepsek/rekap-surat-keluar"
-              ? "bg-[#34542C50]"
-              : ""
-          }`}
-        >
-          <img
-            src="/google-docs.png"
-            alt="Surat Keluar"
-            className="w-[23px] h-[23px]"
-          />
-          <span
-            className={`text-2xl font-semibold ${
-              location.pathname === "/kepsek/rekap-surat-keluar"
-                ? "text-black"
-                : "text-gray-600"
-            }`}
-          >
-            Daftar Disposisi
-          </span>
-        </div>
+      <div className="mt-8 w-full flex flex-col items-center">
+        {menuItems.map((item, idx) => {
+          const active = isActive(item.path, item.additionalPaths);
+          return (
+            <div
+              key={idx}
+              onClick={() => navigate(item.path)}
+              className={`flex items-center gap-4 p-3 mb-4 w-[230px] rounded-lg cursor-pointer transition-all duration-200 ${
+                active ? "bg-[#34542C50]" : "hover:bg-gray-100"
+              }`}
+            >
+              <img src={item.icon} alt={item.label} className="w-[24px] h-[24px]" />
+              <span
+                className={`text-lg ${
+                  active ? "text-black font-semibold" : "text-gray-600"
+                }`}
+              >
+                {item.label}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
