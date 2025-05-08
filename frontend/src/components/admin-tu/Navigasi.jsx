@@ -9,11 +9,6 @@ function NavigasiAdmin() {
     {
       label: "Beranda",
       path: "/admin/beranda-admin",
-      additionalPaths: [
-        "/admin/tambah-surat-masuk",
-        "/admin/edit-surat-masuk",
-        "/admin/detail-surat-masuk"
-      ],
       icon: "/beranda.png"
     },
     {

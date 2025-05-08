@@ -26,9 +26,9 @@ export default function LoginPage() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         if (data.user.role == "ADMIN") {
-          navigate("/admin/rekap-surat-masuk");
+          navigate("/admin/beranda-admin");
         } else if (data.user.role == "KEPSEK") {
-          navigate("/kepsek/rekap-surat-masuk");
+          navigate("/kepsek/beranda-kepsek");
         }
       } else {
         setError(data.message || "Terjadi kesalahan");
