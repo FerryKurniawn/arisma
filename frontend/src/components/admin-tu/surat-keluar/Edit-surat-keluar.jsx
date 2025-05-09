@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "../Navigasi";
-import Logout from "../../Logout";
 import InputForm from "../../InputForm";
+import Logout from "../../Logout";
+import UpdateAlert from "../UpdateAlert";
 
 const EditSuratKeluar = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [file, setFile] = useState(null);
   const [noSurat, setNoSurat] = useState("");
   const [noBerkas, setNoBerkas] = useState("");
   const [alamatPenerima, setAlamatPenerima] = useState("");
@@ -16,6 +18,7 @@ const EditSuratKeluar = () => {
   const [noPetunjuk, setNoPetunjuk] = useState("");
   const [noPaket, setNoPaket] = useState("");
   const [originalData, setOriginalData] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const fetchSurat = async () => {
@@ -23,9 +26,7 @@ const EditSuratKeluar = () => {
         const response = await fetch(
           `http://localhost:2000/api/surat-keluar/${id}`
         );
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data surat keluar");
-        }
+        if (!response.ok) throw new Error("Gagal mengambil data surat keluar");
         const data = await response.json();
 
         setNoSurat(data.noSurat);
@@ -62,38 +63,39 @@ const EditSuratKeluar = () => {
       tanggalKeluar !== originalData.tanggalKeluar ||
       perihal !== originalData.perihal ||
       noPetunjuk !== originalData.noPetunjuk ||
-      noPaket !== originalData.noPaket
+      noPaket !== originalData.noPaket ||
+      file !== null
     );
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = {
-      noSurat,
-      noBerkas,
-      alamatPenerima,
-      tanggalKeluar,
-      perihal,
-      noPetunjuk,
-      noPaket,
-    };
-
     try {
+      const formData = new FormData();
+      formData.append("noSurat", noSurat);
+      formData.append("noBerkas", noBerkas);
+      formData.append("alamatPenerima", alamatPenerima);
+      formData.append("tanggalKeluar", tanggalKeluar);
+      formData.append("perihal", perihal);
+      formData.append("noPetunjuk", noPetunjuk);
+      formData.append("noPaket", noPaket);
+      if (file) formData.append("fileUrl", file);
+
       const response = await fetch(
         `http://localhost:2000/api/surat-keluar/${id}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
+          body: formData,
         }
       );
 
       if (response.ok) {
-        alert("Surat Keluar berhasil diupdate!");
-        navigate("/admin/rekap-surat-keluar");
+        setShowSuccess(true);
       } else {
         alert("Terjadi kesalahan saat mengupdate Surat Keluar.");
       }
@@ -101,6 +103,11 @@ const EditSuratKeluar = () => {
       console.error("Error updating Surat Keluar:", error);
       alert("Terjadi kesalahan saat menghubungi server.");
     }
+  };
+
+  const handleCloseAlert = () => {
+    setShowSuccess(false);
+    navigate("/admin/rekap-surat-keluar");
   };
 
   return (
@@ -172,6 +179,15 @@ const EditSuratKeluar = () => {
               value={noPaket}
               onChange={(e) => setNoPaket(e.target.value)}
             />
+            <InputForm
+              label="Upload File Baru"
+              type="file"
+              onChange={handleFileChange}
+            />
+            {file && (
+              <p className="text-sm text-gray-600 mt-1">File: {file.name}</p>
+            )}
+
             <button
               type="submit"
               disabled={!isChanged()}
@@ -186,6 +202,8 @@ const EditSuratKeluar = () => {
           </form>
         </main>
       </div>
+
+      {showSuccess && <UpdateAlert onClose={handleCloseAlert} />}
     </div>
   );
 };

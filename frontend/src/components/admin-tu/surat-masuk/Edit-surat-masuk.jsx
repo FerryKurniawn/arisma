@@ -21,7 +21,9 @@ const EditSuratMasuk = () => {
   useEffect(() => {
     const fetchSurat = async () => {
       try {
-        const response = await fetch(`http://localhost:2000/api/surat-masuk/${id}`);
+        const response = await fetch(
+          `http://localhost:2000/api/surat-masuk/${id}`
+        );
         if (!response.ok) throw new Error("Gagal mengambil data surat masuk");
         const data = await response.json();
 
@@ -74,10 +76,13 @@ const EditSuratMasuk = () => {
       formData.append("sifatSurat", sifatSurat);
       if (file) formData.append("fileUrl", file);
 
-      const response = await fetch(`http://localhost:2000/api/surat-masuk/${id}`, {
-        method: "PUT",
-        body: formData,
-      });
+      const response = await fetch(
+        `http://localhost:2000/api/surat-masuk/${id}`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         setShowSuccess(true);
@@ -146,28 +151,28 @@ const EditSuratMasuk = () => {
               value={tanggalTerima}
               onChange={(e) => setTanggalTerima(e.target.value)}
             />
-            <div className="flex flex-col gap-1">
-              <label className="font-medium text-gray-700">Sifat Surat</label>
-              <select
-                className="w-full p-3 rounded-md bg-white text-black shadow focus:outline-none focus:ring-2 focus:ring-gray-300"
-                value={sifatSurat}
-                onChange={(e) => setSifatSurat(e.target.value)}
-              >
-                <option value="">Pilih</option>
-                <option value="SangatSegera">Sangat Segera</option>
-                <option value="Segera">Segera</option>
-                <option value="Biasa">Biasa</option>
-              </select>
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="font-medium text-gray-700">Upload File Baru</label>
-              <input
-                type="file"
-                onChange={handleFileChange}
-                className="p-3 rounded-md bg-white text-black shadow"
-              />
-              {file && <p className="text-sm text-gray-600 mt-1">File: {file.name}</p>}
-            </div>
+            <InputForm
+              label="Sifat Surat"
+              isSelect={true}
+              value={sifatSurat}
+              onChange={(e) => setSifatSurat(e.target.value)}
+              options={[
+                { value: "", label: "Pilih" },
+                { value: "SangatSegera", label: "Sangat Segera" },
+                { value: "Segera", label: "Segera" },
+                { value: "Biasa", label: "Biasa" },
+              ]}
+            />
+
+            <InputForm
+              label="Upload File Baru"
+              type="file"
+              onChange={handleFileChange}
+            />
+            {file && (
+              <p className="text-sm text-gray-600 mt-1">File: {file.name}</p>
+            )}
+
             <button
               type="submit"
               disabled={!isChanged()}

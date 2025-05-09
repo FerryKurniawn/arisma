@@ -21,7 +21,7 @@ import Success from "./components/admin-tu/SuccessAlert";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DaftarDisposisi from "./components/kepsek/Disposisi/Daftar-Disposisi";
 import DetailDisposisi from "./components/kepsek/Disposisi/Detail-Disposisi";
-import EditDisposisi from "./components/kepsek/Disposisi/Edit-disposisi";
+import EditDisposisi from "./components/kepsek/Disposisi/Edit-Disposisi";
 
 function App() {
   return (
@@ -153,7 +153,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
         </Routes>
       </BrowserRouter>
     </>

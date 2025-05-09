@@ -149,13 +149,18 @@ app.get("/api/dashboard", async (req, res) => {
     const tahunKeluar = countByYear(suratKeluar, "tanggalKeluar");
 
     // Gabungkan
-    const allYears = new Set([...Object.keys(tahunMasuk), ...Object.keys(tahunKeluar)]);
-    const rekap = Array.from(allYears).sort((a, b) => b - a).map((tahun) => ({
-      tahun,
-      masuk: tahunMasuk[tahun]?.masuk || 0,
-      disposisi: tahunMasuk[tahun]?.disposisi || 0,
-      keluar: tahunKeluar[tahun]?.keluar || 0,
-    }));
+    const allYears = new Set([
+      ...Object.keys(tahunMasuk),
+      ...Object.keys(tahunKeluar),
+    ]);
+    const rekap = Array.from(allYears)
+      .sort((a, b) => b - a)
+      .map((tahun) => ({
+        tahun,
+        masuk: tahunMasuk[tahun]?.masuk || 0,
+        disposisi: tahunMasuk[tahun]?.disposisi || 0,
+        keluar: tahunKeluar[tahun]?.keluar || 0,
+      }));
 
     res.json({
       totalMasuk: suratMasuk.length,
@@ -167,7 +172,6 @@ app.get("/api/dashboard", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
-
 
 // Surat Masuk
 app.get("/api/surat-masuk", async (req, res) => {
@@ -223,22 +227,22 @@ app.post("/api/surat-masuk", upload.single("fileUrl"), async (req, res) => {
   try {
     const parsedTanggal = new Date(tanggalTerima);
 
-if (isNaN(parsedTanggal)) {
-  return res.status(400).json({ message: "Format tanggal tidak valid" });
-}
+    if (isNaN(parsedTanggal)) {
+      return res.status(400).json({ message: "Format tanggal tidak valid" });
+    }
 
-const suratMasuk = await prisma.suratMasuk.create({
-  data: {
-    noSurat,
-    perihal,
-    alamatPengirim,
-    tanggalTerima: parsedTanggal,
-    sifatSurat,
-    fileUrl: req.file ? `/uploads/${req.file.filename}` : null,
-    disposisi,
-    isiDisposisi,
-  },
-});
+    const suratMasuk = await prisma.suratMasuk.create({
+      data: {
+        noSurat,
+        perihal,
+        alamatPengirim,
+        tanggalTerima: parsedTanggal,
+        sifatSurat,
+        fileUrl: req.file ? `/uploads/${req.file.filename}` : null,
+        disposisi,
+        isiDisposisi,
+      },
+    });
 
     res.send("Surat masuk telah berhasil ditambahkan");
   } catch (err) {
@@ -263,6 +267,7 @@ app.put("/api/surat-masuk/:id", upload.single("fileUrl"), async (req, res) => {
   } = req.body;
 
   try {
+    // Pastikan surat dengan ID yang diberikan ada
     const existingSurat = await prisma.suratMasuk.findUnique({
       where: { id: Number(id) },
     });
@@ -271,19 +276,23 @@ app.put("/api/surat-masuk/:id", upload.single("fileUrl"), async (req, res) => {
       return res.status(404).json({ message: "Surat Masuk tidak ditemukan" });
     }
 
+    // Konversi tanggal ke objek Date agar tidak error
+    const parsedTanggal = tanggalTerima ? new Date(tanggalTerima) : null;
+
+    // Lakukan update
     const updatedSurat = await prisma.suratMasuk.update({
       where: { id: Number(id) },
       data: {
         noSurat,
         perihal,
         alamatPengirim,
-        tanggalTerima,
+        tanggalTerima: parsedTanggal,
         sifatSurat,
         fileUrl: req.file
           ? `/uploads/${req.file.filename}`
           : existingSurat.fileUrl,
-        disposisi,
-        isiDisposisi,
+        disposisi: disposisi?.trim() || null,
+        isiDisposisi: isiDisposisi?.trim() || null,
       },
     });
 
@@ -391,7 +400,9 @@ app.post("/api/surat-keluar", upload.single("fileUrl"), async (req, res) => {
       },
     });
 
-    res.status(201).json({ message: "Surat keluar berhasil ditambahkan", data: surat });
+    res
+      .status(201)
+      .json({ message: "Surat keluar berhasil ditambahkan", data: surat });
   } catch (err) {
     console.error("Tambah surat keluar gagal:", err);
     res.status(500).json({ message: "Server error", error: err.message });
@@ -411,8 +422,11 @@ app.put("/api/surat-keluar/:id", upload.single("fileUrl"), async (req, res) => {
   } = req.body;
 
   try {
-    const existing = await prisma.suratKeluar.findUnique({ where: { id: Number(id) } });
-    if (!existing) return res.status(404).json({ message: "Surat tidak ditemukan" });
+    const existing = await prisma.suratKeluar.findUnique({
+      where: { id: Number(id) },
+    });
+    if (!existing)
+      return res.status(404).json({ message: "Surat tidak ditemukan" });
 
     const updated = await prisma.suratKeluar.update({
       where: { id: Number(id) },
