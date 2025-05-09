@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import Logout from "../../Logout";
 import SuccessAlert from "../SuccessAlert";
+import { format } from "date-fns";
 
 const TambahSuratKeluar = () => {
   const navigate = useNavigate();
@@ -15,41 +16,42 @@ const TambahSuratKeluar = () => {
   const [perihal, setPerihal] = useState("");
   const [noPetunjuk, setNoPetunjuk] = useState("");
   const [noPaket, setNoPaket] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false); //
+  const [file, setFile] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  
-    const payload = {
-      noSurat,
-      noBerkas,
-      alamatPenerima,
-      tanggalKeluar: new Date(tanggalKeluar).toISOString(), // Mengubah tanggal menjadi format ISO
-      perihal,
-      noPetunjuk,
-      noPaket,
+  const handleFileChange = (e) => {
+      setFile(e.target.files[0]);
     };
   
-    try {
-      const response = await fetch("http://localhost:2000/api/surat-keluar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+    const handleSubmit = async (e) => {
+      e.preventDefault();
   
-      if (response.ok) {
-        setShowSuccess(true);
-      } else {
-        alert("Terjadi kesalahan saat menambahkan Surat Keluar.");
+      const formData = new FormData();
+      formData.append("noSurat", noSurat);
+      formData.append("noBerkas", noBerkas);
+      formData.append("alamatPenerima", alamatPenerima);
+      formData.append("tanggalKeluar", format(tanggalKeluar, "yyyy-MM-dd"));
+      formData.append("perihal", perihal);
+      formData.append("noPetunjuk", noPetunjuk);
+      formData.append("noPaket", noPaket);
+      formData.append("fileUrl", file);
+  
+      try {
+        const response = await fetch("http://localhost:2000/api/surat-keluar", {
+          method: "POST",
+          body: formData,
+        });
+  
+        if (response.ok) {
+          setShowSuccess(true);
+        } else {
+          alert("Gagal menambahkan surat.");
+        }
+      } catch (error) {
+        alert("Terjadi kesalahan saat menghubungi server.");
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error adding Surat Keluar:", error);
-      alert("Terjadi kesalahan saat menghubungi server.");
-    }
-  };
-  
+    };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -165,6 +167,23 @@ const TambahSuratKeluar = () => {
                 />
               </div>
 
+              <div className="flex items-center gap-4">
+                <label className="font-medium w-64">File Upload</label>
+                <label
+                  htmlFor="fileInput"
+                  className="flex-1 p-6 rounded-md text-center bg-white text-black shadow cursor-pointer"
+                >
+                  {file ? file.name : "Choose files or drag and drop files to upload"}
+                </label>
+                <input
+                  type="file"
+                  name="file"
+                  id="fileInput"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </div>
+
               <button
                 type="submit"
                 className="self-start mt-4 bg-gray-300 hover:bg-gray-400 text-black py-2 px-6 rounded-md"
@@ -174,7 +193,6 @@ const TambahSuratKeluar = () => {
             </form>
           </div>
 
-          {/* ✅ Success alert muncul jika surat berhasil ditambahkan */}
           {showSuccess && (
             <div className="fixed inset-0 flex justify-center items-center z-50">
               <SuccessAlert

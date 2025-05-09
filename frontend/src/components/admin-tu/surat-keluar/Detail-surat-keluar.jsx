@@ -86,6 +86,31 @@ const DetailSuratKeluar = () => {
                 <h3 className="font-semibold">No. Paket</h3>
                 <p>{surat.noPaket ?? "null"}</p>
               </div>
+              <div className="mb-4">
+                <h3 className="font-semibold">File Surat</h3>
+                {surat.fileUrl ? (
+                  surat.fileUrl.endsWith(".pdf") ? (
+                    <iframe
+                      src={`http://localhost:2000${surat.fileUrl}`}
+                      title="File Surat"
+                      width="100%"
+                      height="500px"
+                      className="border rounded"
+                    ></iframe>
+                  ) : (
+                    <a
+                      href={`http://localhost:2000${surat.fileUrl}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      Lihat / Unduh File
+                    </a>
+                  )
+                ) : (
+                  <p className="text-gray-500">Tidak ada file terlampir</p>
+                )}
+              </div>
             </div>
           ) : (
             <p>Data surat keluar tidak ditemukan pada id {id}.</p>

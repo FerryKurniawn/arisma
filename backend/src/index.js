@@ -333,14 +333,15 @@ app.delete("/api/surat-masuk/:id", async (req, res) => {
 app.get("/api/surat-keluar", async (req, res) => {
   try {
     const suratKeluar = await prisma.suratKeluar.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: { updatedAt: "desc" },
     });
     res.json(suratKeluar);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Gagal mengambil data surat keluar." });
+  } catch (err) {
+    console.error("Ambil surat keluar gagal:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+
 app.get("/api/surat-keluar/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -355,14 +356,12 @@ app.get("/api/surat-keluar/:id", async (req, res) => {
 
     res.json(surat);
   } catch (err) {
-    console.error("❌ ERROR SAAT CREATE SuratMasuk:", err); // Tampilkan error lengkap
-    res.status(500).json({
-      message: "Terjadi kesalahan saat menambahkan Surat Masuk",
-      error: err.message,
-    });
+    console.error("Ambil detail surat keluar gagal:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
-app.post("/api/surat-keluar", async (req, res) => {
+
+app.post("/api/surat-keluar", upload.single("fileUrl"), async (req, res) => {
   const {
     noSurat,
     noBerkas,
@@ -374,24 +373,32 @@ app.post("/api/surat-keluar", async (req, res) => {
   } = req.body;
 
   try {
-    const newSurat = await prisma.suratKeluar.create({
+    const parsedDate = new Date(tanggalKeluar);
+    if (isNaN(parsedDate)) {
+      return res.status(400).json({ message: "Format tanggal tidak valid" });
+    }
+
+    const surat = await prisma.suratKeluar.create({
       data: {
         noSurat,
         noBerkas,
         alamatPenerima,
-        tanggalKeluar,
+        tanggalKeluar: parsedDate,
         perihal,
         noPetunjuk,
         noPaket,
+        fileUrl: req.file ? `/uploads/${req.file.filename}` : null,
       },
     });
-    res.status(201).json(newSurat);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Gagal menambahkan surat keluar." });
+
+    res.status(201).json({ message: "Surat keluar berhasil ditambahkan", data: surat });
+  } catch (err) {
+    console.error("Tambah surat keluar gagal:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
-app.put("/api/surat-keluar/:id", async (req, res) => {
+
+app.put("/api/surat-keluar/:id", upload.single("fileUrl"), async (req, res) => {
   const { id } = req.params;
   const {
     noSurat,
@@ -404,24 +411,30 @@ app.put("/api/surat-keluar/:id", async (req, res) => {
   } = req.body;
 
   try {
+    const existing = await prisma.suratKeluar.findUnique({ where: { id: Number(id) } });
+    if (!existing) return res.status(404).json({ message: "Surat tidak ditemukan" });
+
     const updated = await prisma.suratKeluar.update({
-      where: { id: parseInt(id) },
+      where: { id: Number(id) },
       data: {
         noSurat,
         noBerkas,
         alamatPenerima,
-        tanggalKeluar,
+        tanggalKeluar: new Date(tanggalKeluar),
         perihal,
         noPetunjuk,
         noPaket,
+        fileUrl: req.file ? `/uploads/${req.file.filename}` : existing.fileUrl,
       },
     });
-    res.json(updated);
+
+    res.json({ message: "Surat keluar berhasil diperbarui", data: updated });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Gagal mengupdate surat keluar." });
+    console.error("Update surat keluar gagal:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
 app.delete("/api/surat-keluar/:id", async (req, res) => {
   const { id } = req.params;
   try {
