@@ -3,6 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "./Kepsekvigasi";
 import Logout from "../Logout";
 
+// Fungsi untuk mengubah format tanggal menjadi DD-MM-YYYY
+const formatTanggal = (tanggal) => {
+  const date = new Date(tanggal);
+  const day = String(date.getDate()).padStart(2, "0"); // Menambahkan 0 di depan jika kurang dari 10
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Bulan dimulai dari 0, jadi ditambah 1
+  const year = date.getFullYear();
+
+  return `${day}-${month}-${year}`; // Mengembalikan dalam format DD-MM-YYYY
+};
+
 const DetailSuratMasuk = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -19,10 +29,14 @@ const DetailSuratMasuk = () => {
     tenggatWaktu: "",
   });
 
+  const [adminList, setAdminList] = useState([]); // Menyimpan daftar admin
+
   useEffect(() => {
     const fetchSurat = async () => {
       try {
-        const response = await fetch(`http://localhost:2000/api/surat-masuk/${id}`);
+        const response = await fetch(
+          `http://localhost:2000/api/surat-masuk/${id}`
+        );
         if (!response.ok) throw new Error("Gagal mengambil data surat masuk");
         const data = await response.json();
 
@@ -30,9 +44,14 @@ const DetailSuratMasuk = () => {
           noSurat: data.noSurat,
           perihal: data.perihal,
           alamatPengirim: data.alamatPengirim,
-          tanggalTerima: data.tanggalTerima.slice(0, 10),
+          tanggalTerima: data.tanggalTerima
+            ? formatTanggal(data.tanggalTerima)
+            : "", // Format tanggal
           sifatSurat: data.sifatSurat,
-          isiDisposisi: data.isiDisposisi && data.isiDisposisi !== "null" ? data.isiDisposisi : "",
+          isiDisposisi:
+            data.isiDisposisi && data.isiDisposisi !== "null"
+              ? data.isiDisposisi
+              : "",
           fileUrl: data.fileUrl,
           disposisikanKe: "",
           tenggatWaktu: "",
@@ -42,7 +61,18 @@ const DetailSuratMasuk = () => {
       }
     };
 
+    const fetchAdmins = async () => {
+      try {
+        const res = await fetch("http://localhost:2000/api/users?role=admin");
+        const data = await res.json();
+        setAdminList(data);
+      } catch (error) {
+        console.error("Gagal mengambil data admin:", error);
+      }
+    };
+
     fetchSurat();
+    fetchAdmins();
   }, [id]);
 
   const handleChange = (e) => {
@@ -91,7 +121,11 @@ const DetailSuratMasuk = () => {
             </div>
             <div className="mb-4 grid grid-cols-3 gap-4">
               <h3 className="font-semibold">Sifat Surat</h3>
-              <p className="col-span-2">{surat.sifatSurat}</p>
+              <p className="col-span-2">
+                {surat.sifatSurat === "SangatSegera"
+                  ? "Sangat Segera"
+                  : surat.sifatSurat}{" "}
+              </p>
             </div>
             {surat.fileUrl && (
               <div className="mb-4 grid grid-cols-3 gap-4">
@@ -108,9 +142,8 @@ const DetailSuratMasuk = () => {
             )}
           </div>
 
-            <h2 className="text-2xl font-bold mb-4 mt-4">Form Disposisi</h2>
+          <h2 className="text-2xl font-bold mb-4 mt-4">Form Disposisi</h2>
           <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-3xl mt-6">
-
             <div className="mb-4 grid grid-cols-3 gap-4 items-center">
               <h3 className="font-semibold">Disposisikan ke</h3>
               <select
@@ -120,8 +153,11 @@ const DetailSuratMasuk = () => {
                 onChange={handleChange}
               >
                 <option value="">Pilih</option>
-                <option value="admin-tu-1">Admin TU 1</option>
-                <option value="admin-tu-2">Admin TU 2</option>
+                {adminList.map((admin) => (
+                  <option key={admin.id} value={admin.username}>
+                    {admin.username}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -147,6 +183,7 @@ const DetailSuratMasuk = () => {
                 onChange={handleChange}
               />
             </div>
+
             <button className="bg-[#34542C] py-3 px-8 text-white">Kirim</button>
           </div>
         </main>

@@ -47,9 +47,24 @@ app.get("/api", (req, res) => {
 });
 // rest api users
 
-app.get("/api/user", async (req, res) => {
-  const user = await prisma.user.findMany();
-  res.send(user);
+app.get("/api/users", async (req, res) => {
+  const { role } = req.query;
+
+  try {
+    const users = await prisma.user.findMany({
+      where: role ? { role: role.toUpperCase() } : {}, // filter jika ada query
+      select: {
+        id: true,
+        username: true,
+        role: true,
+      },
+    });
+
+    res.json(users);
+  } catch (error) {
+    console.error("Gagal mengambil user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.post("/api/register", async (req, res) => {

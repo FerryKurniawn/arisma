@@ -30,7 +30,15 @@ const SuratMasuk = () => {
   const handleSearch = () => {
     const search = searchTerm.toLowerCase();
     const filtered = suratMasuk.filter((surat) =>
-      [surat.noSurat, surat.perihal, surat.alamatPengirim, surat.tanggalTerima, surat.sifatSurat, surat.disposisi, surat.isiDisposisi]
+      [
+        surat.noSurat,
+        surat.perihal,
+        surat.alamatPengirim,
+        surat.tanggalTerima,
+        surat.sifatSurat,
+        surat.disposisi,
+        surat.isiDisposisi,
+      ]
         .filter(Boolean)
         .some((field) => field.toLowerCase().includes(search))
     );
@@ -96,10 +104,16 @@ const SuratMasuk = () => {
                 <tr>
                   <th className="p-3 text-left font-semibold">No. Surat</th>
                   <th className="p-3 text-left font-semibold">Perihal</th>
-                  <th className="p-3 text-left font-semibold">Alamat Pengirim</th>
-                  <th className="p-3 text-left font-semibold">Tanggal Terima</th>
+                  <th className="p-3 text-left font-semibold">
+                    Alamat Pengirim
+                  </th>
+                  <th className="p-3 text-left font-semibold">
+                    Tanggal Terima
+                  </th>
                   <th className="p-3 text-left font-semibold">Sifat Surat</th>
-                  <th className="p-3 text-left font-semibold">Disposisikan Ke</th>
+                  <th className="p-3 text-left font-semibold">
+                    Disposisikan Ke
+                  </th>
                   <th className="p-3 text-left font-semibold">Isi Disposisi</th>
                   <th className="p-3 text-center font-semibold">Aksi</th>
                 </tr>
@@ -123,11 +137,21 @@ const SuratMasuk = () => {
                     >
                       <td className="p-3">{surat.noSurat}</td>
                       <td className="p-3">{surat.perihal}</td>
-                      <td className="p-3 max-w-[200px] truncate">{surat.alamatPengirim}</td>
-                      <td className="p-3">{formatTanggal(surat.tanggalTerima)}</td>
-                      <td className="p-3">{surat.sifatSurat}</td>
+                      <td className="p-3 max-w-[200px] truncate">
+                        {surat.alamatPengirim}
+                      </td>
+                      <td className="p-3">
+                        {formatTanggal(surat.tanggalTerima)}
+                      </td>
+                      <td className="p-3">
+                        {surat.sifatSurat == "SangatSegera"
+                          ? "Sangat Segera"
+                          : surat.sifatSurat}
+                      </td>
                       <td className="p-3">{surat.disposisi || "-"}</td>
-                      <td className="p-3 max-w-[200px] truncate">{surat.isiDisposisi || "-"}</td>
+                      <td className="p-3 max-w-[200px] truncate">
+                        {surat.isiDisposisi || "-"}
+                      </td>
                       <td className="p-3 flex justify-center gap-3">
                         <button onClick={() => handleView(surat.id)}>
                           <img src="/eye.png" width="20" alt="View" />
