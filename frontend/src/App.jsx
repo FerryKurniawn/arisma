@@ -13,15 +13,14 @@ import Editsuratkeluaradmin from "./components/admin-tu/surat-keluar/Edit-surat-
 import Detailsuratkeluaradmin from "./components/admin-tu/surat-keluar/Detail-surat-keluar";
 import Tambahsuratkeluaradmin from "./components/admin-tu/surat-keluar/Tambah-surat-keluar";
 //kepsek
-import Suratmasukkepsek from "./components/kepsek/Surat-masuk";
-import Detailsuratmasukkepsek from "./components/kepsek/Detail-surat-masuk";
+import Suratmasukkepsek from "./components/kepsek/surat-masuk/Rekap-surat-masuk";
+import Detailsuratmasukkepsek from "./components/kepsek/surat-masuk/Detail-surat-masuk";
 import BerandaKepsek from "./components/kepsek/BerandaKepsek";
 
-import Success from "./components/admin-tu/SuccessAlert";
 import ProtectedRoute from "./components/ProtectedRoute";
-import DaftarDisposisi from "./components/kepsek/Disposisi/Daftar-Disposisi";
-import DetailDisposisi from "./components/kepsek/Disposisi/Detail-Disposisi";
-import EditDisposisi from "./components/kepsek/Disposisi/Edit-Disposisi";
+import DaftarDisposisi from "./components/kepsek/disposisi/Daftar-Disposisi";
+import DetailDisposisi from "./components/kepsek/disposisi/Detail-Disposisi";
+import EditDisposisi from "./components/kepsek/disposisi/Edit-Disposisi";
 
 function App() {
   return (
@@ -130,7 +129,7 @@ function App() {
             }
           />
           <Route
-            path="/kepsek/Daftar-Disposisi"
+            path="/kepsek/daftar-disposisi"
             element={
               <ProtectedRoute allowedRoles={["KEPSEK"]}>
                 <DaftarDisposisi />
@@ -138,7 +137,7 @@ function App() {
             }
           />
           <Route
-            path="/kepsek/Disposisi/Detail-Disposisi/:id"
+            path="/kepsek/detail-disposisi/:id"
             element={
               <ProtectedRoute allowedRoles={["KEPSEK"]}>
                 <DetailDisposisi />
@@ -146,7 +145,7 @@ function App() {
             }
           />
           <Route
-            path="/kepsek/Disposisi/Edit-Disposisi/:id"
+            path="/kepsek/edit-disposisi/:id"
             element={
               <ProtectedRoute allowedRoles={["KEPSEK"]}>
                 <EditDisposisi />

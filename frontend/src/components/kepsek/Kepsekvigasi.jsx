@@ -9,30 +9,39 @@ function Navigasi() {
     {
       label: "Beranda",
       path: "/kepsek/beranda-kepsek",
-      icon: "/beranda.png"
+      icon: "/beranda.png",
     },
     {
       label: "Surat Masuk",
       path: "/kepsek/surat-masuk",
-      additionalPaths: [
-        "/kepsek/detail-surat-masuk"
-      ],
-      icon: "/surat_masuk.png"
+      additionalPaths: ["/kepsek/detail-surat-masuk"],
+      icon: "/surat_masuk.png",
     },
     {
       label: "Disposisi",
-      path: "/kepsek/Daftar-Disposisi",
+      path: "/kepsek/daftar-disposisi",
       additionalPaths: [
-        "/kepsek/Detail-Disposisi",
-        "/kepsek/Edit-Disposisi",
+        "/kepsek/detail-disposisi",
+        "/kepsek/edit-disposisi",
+        // Menambahkan path untuk admin dengan id dinamis
+        "/kepsek/detail-disposisi/", // path dinamis
+        "/kepsek/edit-disposisi/", // path dinamis
       ],
-      icon: "/google-docs.png"
-    }
+      icon: "/google-docs.png",
+    },
   ];
 
-  const isActive = (path, additionalPaths = []) =>
-    location.pathname === path ||
-    additionalPaths.some((p) => location.pathname.startsWith(p));
+  // Fungsi untuk memeriksa apakah lokasi saat ini cocok dengan path atau path dinamis
+  const isActive = (path, additionalPaths = []) => {
+    // Periksa path utama
+    if (location.pathname === path) return true;
+
+    // Periksa path dinamis menggunakan regex
+    return additionalPaths.some((p) => {
+      const regex = new RegExp(`^${p}([/].*)?$`); // Mengizinkan parameter setelah '/'
+      return regex.test(location.pathname);
+    });
+  };
 
   return (
     <div className="w-[320px] h-screen fixed top-0 left-0 bg-white shadow-md flex flex-col items-center py-6 z-50">
@@ -55,7 +64,11 @@ function Navigasi() {
                 active ? "bg-[#34542C50]" : "hover:bg-gray-100"
               }`}
             >
-              <img src={item.icon} alt={item.label} className="w-[24px] h-[24px]" />
+              <img
+                src={item.icon}
+                alt={item.label}
+                className="w-[24px] h-[24px]"
+              />
               <span
                 className={`text-lg ${
                   active ? "text-black font-semibold" : "text-gray-600"

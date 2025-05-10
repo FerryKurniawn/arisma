@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navigasi from "../Navigasi";
 import InputForm from "../../InputForm";
 import Logout from "../../Logout";
-import UpdateAlert from "../UpdateAlert";
+import UpdateAlert from "../../UpdateAlert";
 
 const EditSuratMasuk = () => {
   const navigate = useNavigate();

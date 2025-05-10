@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
-import SuccessAlert from "../SuccessAlert";
+import AddAlert from "../../AddAlert";
 
 const TambahSuratMasuk = () => {
   const navigate = useNavigate();
@@ -175,7 +175,7 @@ const TambahSuratMasuk = () => {
 
           {showSuccess && (
             <div className="fixed inset-0 flex justify-center items-center z-50">
-              <SuccessAlert
+              <AddAlert
                 onClose={() => {
                   setShowSuccess(false);
                   navigate("/admin/rekap-surat-masuk");

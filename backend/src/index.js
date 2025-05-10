@@ -271,15 +271,7 @@ app.post("/api/surat-masuk", upload.single("fileUrl"), async (req, res) => {
 
 app.put("/api/surat-masuk/:id", upload.single("fileUrl"), async (req, res) => {
   const { id } = req.params;
-  const {
-    noSurat,
-    perihal,
-    alamatPengirim,
-    tanggalTerima,
-    sifatSurat,
-    disposisi,
-    isiDisposisi,
-  } = req.body;
+  const { disposisi, isiDisposisi, disposisikanKe, tenggatWaktu } = req.body;
 
   try {
     // Pastikan surat dengan ID yang diberikan ada
@@ -291,23 +283,16 @@ app.put("/api/surat-masuk/:id", upload.single("fileUrl"), async (req, res) => {
       return res.status(404).json({ message: "Surat Masuk tidak ditemukan" });
     }
 
-    // Konversi tanggal ke objek Date agar tidak error
-    const parsedTanggal = tanggalTerima ? new Date(tanggalTerima) : null;
+    const parsedTanggal = tenggatWaktu ? new Date(tenggatWaktu) : null;
 
-    // Lakukan update
+    // Lakukan update pada data surat
     const updatedSurat = await prisma.suratMasuk.update({
       where: { id: Number(id) },
       data: {
-        noSurat,
-        perihal,
-        alamatPengirim,
-        tanggalTerima: parsedTanggal,
-        sifatSurat,
-        fileUrl: req.file
-          ? `/uploads/${req.file.filename}`
-          : existingSurat.fileUrl,
-        disposisi: disposisi?.trim() || null,
-        isiDisposisi: isiDisposisi?.trim() || null,
+        disposisi,
+        isiDisposisi,
+        disposisikanKe,
+        tenggatWaktu: parsedTanggal,
       },
     });
 

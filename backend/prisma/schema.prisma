@@ -32,9 +32,24 @@ model SuratMasuk {
   fileUrl        String?
   disposisi      String?
   isiDisposisi   String?
+  disposisikanKe String?  // Menambahkan field untuk "Disposisikan Ke"
+  tenggatWaktu   DateTime? // Menambahkan field untuk "Tenggat Waktu"
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  daftarDisposisi DaftarDisposisi[]
+}
+
+model DaftarDisposisi {
+  id             Int       @id @default(autoincrement())
+  suratMasukId   Int
+  disposisikanKe String
+  isiDisposisi   String
+  tenggatWaktu   DateTime
+  createdAt      DateTime  @default(now())
+
+  suratMasuk     SuratMasuk @relation(fields: [suratMasukId], references: [id])
 }
 
 model SuratKeluar {
