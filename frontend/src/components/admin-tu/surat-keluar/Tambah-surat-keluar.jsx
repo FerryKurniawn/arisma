@@ -3,7 +3,7 @@ import Navigasi from "../Navigasi";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import Logout from "../../Logout";
-import SuccessAlert from "../../AddAlert";
+import SentAlert from "../../SentAlert";
 import { format } from "date-fns";
 
 const TambahSuratKeluar = () => {
@@ -197,7 +197,7 @@ const TambahSuratKeluar = () => {
 
           {showSuccess && (
             <div className="fixed inset-0 flex justify-center items-center z-50">
-              <SuccessAlert
+              <SentAlert
                 onClose={() => {
                   setShowSuccess(false);
                   navigate("/admin/rekap-surat-keluar");
