@@ -165,7 +165,7 @@ const EditSuratMasuk = () => {
             />
 
             <InputForm
-              label="Upload File Baru"
+              label="Unggah File Baru"
               type="file"
               onChange={handleFileChange}
             />

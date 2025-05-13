@@ -157,7 +157,11 @@ const DetailSuratMasuk = () => {
             </div>
             <div className="mb-4 grid grid-cols-3 gap-4">
               <h3 className="font-semibold">Sifat Surat</h3>
-              <p className="col-span-2">{surat.sifatSurat}</p>
+              <p className="col-span-2">
+                {surat.sifatSurat == "SangatSegera"
+                  ? "Sangat Segera"
+                  : surat.sifatSurat}
+              </p>
             </div>
             {surat.fileUrl && (
               <div className="mb-4 grid grid-cols-3 gap-4">

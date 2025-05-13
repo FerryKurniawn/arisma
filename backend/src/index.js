@@ -269,43 +269,56 @@ app.post("/api/surat-masuk", upload.single("fileUrl"), async (req, res) => {
   }
 });
 
-app.put("/api/surat-masuk/:id", upload.single("fileUrl"), async (req, res) => {
-  const { id } = req.params;
-  const { disposisi, isiDisposisi, disposisikanKe, tenggatWaktu } = req.body;
+app.put("/api/surat-masuk/:id", async (req, res) => {
+  const {
+    noSurat,
+    perihal,
+    alamatPengirim,
+    tanggalTerima,
+    sifatSurat,
+    fileUrl,
+    isiDisposisi,
+    disposisi,
+    tenggatWaktu,
+  } = req.body;
+
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) return res.status(400).json({ error: "ID tidak valid" });
+
+  const dataToUpdate = {};
+
+  // Tambahkan hanya field yang ada dan valid
+  if (noSurat) dataToUpdate.noSurat = noSurat;
+  if (perihal) dataToUpdate.perihal = perihal;
+  if (alamatPengirim) dataToUpdate.alamatPengirim = alamatPengirim;
+  if (sifatSurat) dataToUpdate.sifatSurat = sifatSurat;
+  if (fileUrl) dataToUpdate.fileUrl = fileUrl;
+  if (isiDisposisi) dataToUpdate.isiDisposisi = isiDisposisi;
+  if (disposisi) dataToUpdate.disposisi = disposisi;
+  if (tenggatWaktu) dataToUpdate.tenggatWaktu = new Date(tenggatWaktu);
+
+  // Khusus tanggalTerima, validasi terlebih dahulu
+  if (tanggalTerima) {
+    const parsedDate = new Date(tanggalTerima);
+    if (!isNaN(parsedDate)) {
+      dataToUpdate.tanggalTerima = parsedDate;
+    } else {
+      return res
+        .status(400)
+        .json({ error: "Format tanggalTerima tidak valid" });
+    }
+  }
 
   try {
-    // Pastikan surat dengan ID yang diberikan ada
-    const existingSurat = await prisma.suratMasuk.findUnique({
-      where: { id: Number(id) },
+    const updated = await prisma.suratMasuk.update({
+      where: { id },
+      data: dataToUpdate,
     });
 
-    if (!existingSurat) {
-      return res.status(404).json({ message: "Surat Masuk tidak ditemukan" });
-    }
-
-    const parsedTanggal = tenggatWaktu ? new Date(tenggatWaktu) : null;
-
-    // Lakukan update pada data surat
-    const updatedSurat = await prisma.suratMasuk.update({
-      where: { id: Number(id) },
-      data: {
-        disposisi,
-        isiDisposisi,
-        disposisikanKe,
-        tenggatWaktu: parsedTanggal,
-      },
-    });
-
-    res.status(200).json({
-      message: "Surat Masuk berhasil diperbarui",
-      data: updatedSurat,
-    });
+    res.json(updated);
   } catch (error) {
     console.error("Error updating Surat Masuk:", error);
-    res.status(500).json({
-      message: "Terjadi kesalahan server",
-      error: error.message,
-    });
+    res.status(500).json({ error: "Terjadi kesalahan saat mengupdate surat" });
   }
 });
 

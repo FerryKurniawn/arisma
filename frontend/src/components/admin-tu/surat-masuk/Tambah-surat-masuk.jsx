@@ -146,14 +146,12 @@ const TambahSuratMasuk = () => {
               </div>
 
               <div className="flex items-center gap-4">
-                <label className="font-medium w-64">File Upload</label>
+                <label className="font-medium w-64">Unggah File</label>
                 <label
                   htmlFor="fileInput"
                   className="flex-1 p-6 rounded-md text-center bg-white text-black shadow cursor-pointer"
                 >
-                  {file
-                    ? file.name
-                    : "Choose files or drag and drop files to upload"}
+                  {file ? file.name : "Pilih file atau seret file ke kolom"}
                 </label>
                 <input
                   type="file"

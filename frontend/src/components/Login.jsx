@@ -51,14 +51,14 @@ export default function LoginPage() {
           <p className="text-center mt-2 text-gray-700 flex flex-col">
             <strong className="text-[25px]">ARISMA</strong>
             <strong className="text-[20 px]">
-              (ARSIP DIGITAL MADRASAH ALIYAH NEGERI 1 SINTANG)
+              ARSIP DIGITAL MADRASAH ALIYAH <br></br>NEGERI 1 SINTANG
             </strong>
             .
           </p>
           <form className="mt-6" onSubmit={handleLogin}>
             <div className="mb-4">
               <label className="block text-gray-700 font-medium">
-                User name
+                Username
               </label>
               <input
                 type="text"
@@ -66,7 +66,7 @@ export default function LoginPage() {
                 className={`w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 ${
                   error ? "border-red-500" : "border-gray-300"
                 }`}
-                placeholder="Enter your User name"
+                placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -83,7 +83,7 @@ export default function LoginPage() {
                   className={`w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 pr-10 ${
                     error ? "border-red-500" : "border-gray-300"
                   }`}
-                  placeholder="Enter your Password"
+                  placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

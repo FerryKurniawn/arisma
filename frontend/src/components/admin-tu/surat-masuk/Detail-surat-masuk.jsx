@@ -71,7 +71,11 @@ const Detailsuratmasuk = () => {
               </div>
               <div className="mb-4 grid grid-cols-3 gap-4">
                 <h3 className="font-semibold">Sifat Surat</h3>
-                <p>{surat.sifatSurat}</p>
+                <p>
+                  {surat.sifatSurat == "SangatSegera"
+                    ? "Sangat Segera"
+                    : surat.sifatSurat}
+                </p>
               </div>
               <div className="mb-4 grid grid-cols-3 gap-4">
                 <h3 className="font-semibold">Disposisi</h3>

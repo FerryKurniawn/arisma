@@ -104,7 +104,7 @@ const DetailSuratKeluar = () => {
                       rel="noopener noreferrer"
                       className="text-blue-600 underline"
                     >
-                      Lihat / Unduh File
+                      Lihat File
                     </a>
                   )
                 ) : (
